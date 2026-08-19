@@ -117,7 +117,7 @@ body {
   .mobile-text { display: block !important; }
 }
 
-.mobile-text { display: none; }
+.mobile-text { display: none; text-align: center; width: 100%; }
 
 .scroll-indicator {
   margin-top: 4rem;

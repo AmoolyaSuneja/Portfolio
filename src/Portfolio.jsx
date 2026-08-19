@@ -33,13 +33,12 @@ export default function Portfolio() {
 
     const currentTopIndex = order.current[0];
     
-    // 1. Throw off screen with an arced trajectory
+    // 1. Throw off screen horizontally
     api.start(i => {
       if (i === currentTopIndex) {
         return {
-          x: 250 * dir, // Not fully off screen, just to the side
-          y: 250,       // Drop it DOWN so it doesn't get covered by the deck
-          rot: dir * 20,
+          x: 600 * dir,
+          rot: dir * 15,
           config: { mass: 0.5, tension: 300, friction: 25 }
         };
       }
