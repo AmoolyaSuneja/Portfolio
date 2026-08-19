@@ -113,6 +113,7 @@ body {
 @media (max-width: 600px) {
   .welcome-screen h2 { font-size: 2rem; }
   .welcome-screen h1 { font-size: 1rem; }
+  .spacebar-prompt h1 { font-size: 1.5rem; } /* Shrink on mobile so it doesn't wrap! */
   .desktop-text { display: none !important; }
   .mobile-text { display: block !important; }
 }

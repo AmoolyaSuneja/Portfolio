@@ -6,7 +6,13 @@ export default function Intro({ onComplete }) {
   const scrollRef = useRef(0);
 
   useEffect(() => {
-    const handleGlobalInteraction = () => {
+    const handleGlobalInteraction = (e) => {
+      // If it's a keydown event, only proceed if it's the Space key
+      if (e && e.type === 'keydown') {
+        if (e.code !== 'Space') return;
+        e.preventDefault();
+      }
+
       if (phase === 0) {
         setPhase(1);
         setTimeout(() => setPhase(2), 2500);
@@ -17,6 +23,7 @@ export default function Intro({ onComplete }) {
     };
 
     window.addEventListener('pointerdown', handleGlobalInteraction);
+    window.addEventListener('keydown', handleGlobalInteraction);
     
     // Fallback for laptops with trackpads/scroll wheels
     const handleScroll = () => {
@@ -26,6 +33,7 @@ export default function Intro({ onComplete }) {
 
     return () => {
       window.removeEventListener('pointerdown', handleGlobalInteraction);
+      window.removeEventListener('keydown', handleGlobalInteraction);
       window.removeEventListener('wheel', handleScroll);
     };
   }, [phase, onComplete]);
