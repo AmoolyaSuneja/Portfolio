@@ -32,52 +32,20 @@ export default function Portfolio() {
     isAnimating.current = true;
 
     const currentTopIndex = order.current[0];
-    
-    // Logically shift the deck instantly
     order.current.push(order.current.shift());
 
-    // 1. Smoothly glide the top card outward, preserving swipe momentum!
+    // Fly completely off-screen on BOTH desktop and mobile so the reversal is invisible
+    const exitX = (window.innerWidth / 2 + 300) * dir;
+
     api.start(i => {
       const newPos = order.current.indexOf(i);
-      
       if (i === currentTopIndex) {
         return {
-          to: async (next) => {
-            const isMobile = window.innerWidth < 600;
-            
-            // 1. Fly out extremely fast on desktop to avoid hanging, but gently on mobile
-            await next({
-              x: 450 * dir, 
-              rot: dir * 5, 
-              config: { 
-                mass: 0.5, 
-                tension: isMobile ? 350 : 800, 
-                friction: 25, 
-                velocity: velocity 
-              } 
-            });
-            
-            // 2. The exact millisecond it naturally hits 0 velocity, drop z-index
-            await next({ zIndex: cardsData.length - newPos, immediate: true });
-            
-            // 3. Smoothly and quickly slide back into the bottom of the deck
-            await next({
-              x: 0,
-              rot: 0,
-              y: newPos * 20,
-              scale: 1 - newPos * 0.05,
-              config: { 
-                mass: 0.5, 
-                tension: isMobile ? 300 : 600, 
-                friction: 25 
-              } 
-            });
-            
-            isAnimating.current = false;
-          }
+          x: exitX, 
+          rot: dir * 15,
+          config: { mass: 1, tension: 400, friction: 35, velocity: velocity } 
         };
       } else {
-        // Other cards smoothly slide up immediately
         return {
           x: 0,
           rot: 0,
@@ -89,6 +57,28 @@ export default function Portfolio() {
         };
       }
     });
+
+    // Yank it back while it's completely off-screen (no visible jitter)
+    setTimeout(() => {
+      api.start(i => {
+        if (i === currentTopIndex) {
+          const newPos = order.current.indexOf(i);
+          return {
+            x: 0,
+            rot: 0,
+            y: newPos * 20,
+            scale: 1 - newPos * 0.05,
+            zIndex: cardsData.length - newPos,
+            config: { mass: 1, tension: 250, friction: 30 }, 
+            immediate: key => key === 'zIndex'
+          };
+        }
+      });
+
+      setTimeout(() => {
+        isAnimating.current = false;
+      }, 350);
+    }, 200); // 200ms ensures it's off-screen but keeps the cycle feeling fast!
   };
 
   const bind = useDrag(({ args: [index], down, movement: [mx], direction: [xDir], velocity: [vx], event }) => {
