@@ -249,7 +249,7 @@ function ExperienceSection() {
           <li>Contributing to software development projects by building and improving applications.</li>
           <li>Collaborating with the team to deliver reliable solutions and solve technical challenges.</li>
         </ul>
-        <p className="tech-stack" style={{marginTop: '0.5rem', fontSize: '0.75rem'}}>JS, React.js, Node.js, Express.js, MongoDB, PostgreSQL, Tailwind CSS</p>
+        <p className="tech-stack" style={{marginTop: '0.5em'}}>JS, React.js, Node.js, Express.js, MongoDB, PostgreSQL, Tailwind CSS</p>
       </div>
 
       <div className="experience-item">
@@ -261,7 +261,7 @@ function ExperienceSection() {
           <li>Shipped user-facing features in a React-based production web application.</li>
           <li>Integrated REST APIs into frontend workflows and refactored components.</li>
         </ul>
-        <p className="tech-stack" style={{marginTop: '0.5rem', fontSize: '0.75rem'}}>JS, React.js, Node.js, Express.js, MongoDB, PostgreSQL, Tailwind CSS</p>
+        <p className="tech-stack" style={{marginTop: '0.5em'}}>JS, React.js, Node.js, Express.js, MongoDB, PostgreSQL, Tailwind CSS</p>
       </div>
     </section>
   );

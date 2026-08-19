@@ -62,18 +62,18 @@ export default function Intro({ onComplete }) {
   const line2 = "Welcome to my portfolio".split("");
 
   return (
-    <div className="intro-container">
+    <div 
+      className="intro-container"
+      onClick={() => {
+        if (phase === 0) {
+          setPhase(1);
+          setTimeout(() => setPhase(2), 2500);
+        }
+      }}
+      style={{ cursor: phase === 0 ? 'pointer' : 'default' }}
+    >
       {phase === 0 && (
-        <div 
-          className="spacebar-prompt"
-          onClick={() => {
-            if (phase === 0) {
-              setPhase(1);
-              setTimeout(() => setPhase(2), 2500);
-            }
-          }}
-          style={{ cursor: 'pointer' }}
-        >
+        <div className="spacebar-prompt">
           <div className="geometric-shape"></div>
           <h1 className="desktop-text">Hit space bar</h1>
           <h1 className="mobile-text">Click to proceed</h1>
