@@ -222,7 +222,7 @@ function ProjectsSection() {
           </div>
         </div>
         <p className="tech-stack">React 18, TypeScript, Vite, Node.js, MongoDB</p>
-        <p className="project-desc">Secure Personal Vault with Multi-Party Authorization. Features AES-256-GCM encryption.</p>
+        <p className="project-desc">Secure Personal Vault with Multi-Party Authorization. Features AES-256-GCM encryption. Includes dual-approval workflows, time-locked entries, and nominee-based succession.</p>
       </div>
       <div className="project-item">
         <div className="project-header">
@@ -233,7 +233,7 @@ function ProjectsSection() {
           </div>
         </div>
         <p className="tech-stack">React 19, Tailwind CSS, Prisma, Node.js</p>
-        <p className="project-desc">Full-Stack Real-Time 2D Web Metaverse featuring real-time arenas.</p>
+        <p className="project-desc">Full-Stack Real-Time 2D Web Metaverse featuring real-time arenas. Uses WebSockets for multiplayer state synchronization and Prisma for persistent game data.</p>
       </div>
       <div className="project-item">
         <div className="project-header">
@@ -244,7 +244,7 @@ function ProjectsSection() {
           </div>
         </div>
         <p className="tech-stack">React, WebSockets, HTML5 Canvas, AI</p>
-        <p className="project-desc">Real-Time Collaborative Whiteboard with event-driven communication.</p>
+        <p className="project-desc">Real-Time Collaborative Whiteboard with event-driven communication. Supports AI-assisted shape recognition, live presence, chat, and canvas export to PDF.</p>
       </div>
     </section>
   );
