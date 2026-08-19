@@ -27,7 +27,7 @@ export default function Portfolio() {
 
   const [springs, api] = useSprings(cardsData.length, i => getSpringProps(order.current.indexOf(i)));
 
-  const cycleDeck = (dir = 1) => {
+  const cycleDeck = (dir = 1, velocity = 0) => {
     if (isAnimating.current) return;
     isAnimating.current = true;
 
@@ -36,18 +36,37 @@ export default function Portfolio() {
     // Logically shift the deck instantly
     order.current.push(order.current.shift());
 
-    // 1. Explode the top card outward very fast
+    // 1. Smoothly glide the top card outward, preserving swipe momentum!
     api.start(i => {
       const newPos = order.current.indexOf(i);
       
       if (i === currentTopIndex) {
         return {
-          x: 600 * dir, // Far enough to clear the deck
-          rot: dir * 15,
-          config: { mass: 0.5, tension: 700, friction: 30 } // High tension for snappy exit
+          to: async (next) => {
+            // 1. Fly out extremely fast to just outside the deck bounds
+            await next({
+              x: 450 * dir, 
+              rot: dir * 5, 
+              config: { mass: 0.5, tension: 800, friction: 25, velocity: velocity } 
+            });
+            
+            // 2. The exact millisecond it naturally hits 0 velocity, drop z-index
+            await next({ zIndex: cardsData.length - newPos, immediate: true });
+            
+            // 3. Smoothly and quickly slide back into the bottom of the deck
+            await next({
+              x: 0,
+              rot: 0,
+              y: newPos * 20,
+              scale: 1 - newPos * 0.05,
+              config: { mass: 0.5, tension: 600, friction: 25 } 
+            });
+            
+            isAnimating.current = false;
+          }
         };
       } else {
-        // Other cards smoothly slide up to take the empty space immediately
+        // Other cards smoothly slide up immediately
         return {
           x: 0,
           rot: 0,
@@ -59,29 +78,6 @@ export default function Portfolio() {
         };
       }
     });
-
-    // 2. Yank it back the exact millisecond it clears the deck (~180ms)
-    setTimeout(() => {
-      api.start(i => {
-        if (i === currentTopIndex) {
-          const newPos = order.current.indexOf(i);
-          return {
-            x: 0,
-            rot: 0,
-            y: newPos * 20,
-            scale: 1 - newPos * 0.05,
-            zIndex: cardsData.length - newPos,
-            config: { mass: 1, tension: 350, friction: 30 }, // Snappy return
-            immediate: key => key === 'zIndex'
-          };
-        }
-      });
-
-      // Unlock interaction once the return animation settles
-      setTimeout(() => {
-        isAnimating.current = false;
-      }, 350);
-    }, 180);
   };
 
   const bind = useDrag(({ args: [index], down, movement: [mx], direction: [xDir], velocity: [vx], event }) => {
@@ -92,11 +88,11 @@ export default function Portfolio() {
     if (event.target.tagName === 'A' || event.target.tagName === 'SPAN') return;
 
     if (!down && (vx > 0.3 || Math.abs(mx) > 100)) {
-      // Swiped!
-      cycleDeck(mx > 0 ? 1 : -1); 
+      // Swiped! Pass velocity to preserve momentum
+      cycleDeck(mx > 0 ? 1 : -1, vx * xDir); 
     } else if (!down && Math.abs(mx) < 5) {
       // Clicked!
-      cycleDeck(1);
+      cycleDeck(1, 0);
     } else {
       // Dragging
       api.start(i => {
