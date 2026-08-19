@@ -43,11 +43,18 @@ export default function Portfolio() {
       if (i === currentTopIndex) {
         return {
           to: async (next) => {
-            // 1. Fly out extremely fast to just outside the deck bounds
+            const isMobile = window.innerWidth < 600;
+            
+            // 1. Fly out extremely fast on desktop to avoid hanging, but gently on mobile
             await next({
               x: 450 * dir, 
               rot: dir * 5, 
-              config: { mass: 0.5, tension: 800, friction: 25, velocity: velocity } 
+              config: { 
+                mass: 0.5, 
+                tension: isMobile ? 350 : 800, 
+                friction: 25, 
+                velocity: velocity 
+              } 
             });
             
             // 2. The exact millisecond it naturally hits 0 velocity, drop z-index
@@ -59,7 +66,11 @@ export default function Portfolio() {
               rot: 0,
               y: newPos * 20,
               scale: 1 - newPos * 0.05,
-              config: { mass: 0.5, tension: 600, friction: 25 } 
+              config: { 
+                mass: 0.5, 
+                tension: isMobile ? 300 : 600, 
+                friction: 25 
+              } 
             });
             
             isAnimating.current = false;
