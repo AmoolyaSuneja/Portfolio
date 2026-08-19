@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 export default function Intro({ onComplete }) {
-  const [phase, setPhase] = useState(2); 
+  const [phase, setPhase] = useState(2);
   const scrollRef = useRef(0);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function Intro({ onComplete }) {
 
     window.addEventListener('pointerdown', handleGlobalInteraction);
     window.addEventListener('keydown', handleGlobalInteraction);
-    
+
     // Fallback for laptops with trackpads/scroll wheels
     const handleScroll = () => {
       if (phase === 2) handleGlobalInteraction();
@@ -40,27 +40,27 @@ export default function Intro({ onComplete }) {
     const randomX = (Math.random() - 0.5) * 1000;
     const randomY = (Math.random() - 0.5) * 1000;
     const randomRotate = (Math.random() - 0.5) * 720;
-    
+
     return {
       initial: { opacity: 0, scale: 0.5 },
       visible: { opacity: 1, scale: 1, transition: { duration: 0.8, delay: 0.4 + index * 0.04 } },
-      scatter: { 
-        x: randomX, 
-        y: randomY, 
-        rotate: randomRotate, 
-        opacity: 0, 
+      scatter: {
+        x: randomX,
+        y: randomY,
+        rotate: randomRotate,
+        opacity: 0,
         scale: 0,
         filter: "blur(10px)",
-        transition: { duration: 1, ease: "easeInOut" } 
+        transition: { duration: 1, ease: "easeInOut" }
       }
     };
   };
 
-  const line1 = "Hey this is amoolya!".split("");
+  const line1 = "Hey this is Amoolya!".split("");
   const line2 = "Welcome to my portfolio".split("");
 
   return (
-    <div 
+    <div
       className="intro-container"
       style={{ cursor: phase === 2 ? 'pointer' : 'default' }}
     >
@@ -94,8 +94,8 @@ export default function Intro({ onComplete }) {
               ))}
             </h1>
           </div>
-          
-          <motion.div 
+
+          <motion.div
             className="scroll-indicator"
             initial={{ opacity: 0 }}
             animate={{ opacity: phase === 3 ? 0 : 1 }}
