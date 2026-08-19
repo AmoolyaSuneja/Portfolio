@@ -68,19 +68,20 @@ export default function Portfolio() {
           return {
             rot: 0,
             y: newPos * 20,
-            scale: 1 - newPos * 0.05,
             zIndex: cardsData.length - newPos,
-            immediate: key => ['zIndex', 'scale', 'rot', 'y'].includes(key) // Instant snap for everything EXCEPT X!
+            immediate: key => ['zIndex', 'rot', 'y'].includes(key) // Instant snap for everything EXCEPT X and Scale!
           };
         }
       });
 
-      // 2. Next frame, smoothly slide it horizontally STRAIGHT BACK IN to X=0
+      // 2. Next frame, smoothly slide it horizontally STRAIGHT BACK IN to X=0, and smoothly shrink it to fit the 3D stack!
       requestAnimationFrame(() => {
         api.start(i => {
           if (i === currentTopIndex) {
+            const newPos = order.current.indexOf(i);
             return {
               x: 0, 
+              scale: 1 - newPos * 0.05, 
               config: { mass: 1, tension: 250, friction: 30 }, 
               immediate: false
             };
