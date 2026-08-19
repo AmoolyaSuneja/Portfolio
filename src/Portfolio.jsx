@@ -59,30 +59,28 @@ export default function Portfolio() {
       }
     });
 
-    // Yank it back while it's completely off-screen (no visible jitter)
+    // Yank it back while it's completely off-screen
     setTimeout(() => {
-      // 1. Instantly teleport the card perfectly below the deck
+      // 1. Instantly drop zIndex and scale while it is still off-screen (X is still exitX)
       api.start(i => {
         if (i === currentTopIndex) {
           const newPos = order.current.indexOf(i);
           return {
-            x: 0,
             rot: 0,
-            y: 600, // Start 600px down (below the deck)
+            y: newPos * 20,
             scale: 1 - newPos * 0.05,
             zIndex: cardsData.length - newPos,
-            immediate: true // Instant snap!
+            immediate: key => ['zIndex', 'scale', 'rot', 'y'].includes(key) // Instant snap for everything EXCEPT X!
           };
         }
       });
 
-      // 2. Next frame, smoothly slide it vertically UP into its slot!
+      // 2. Next frame, smoothly slide it horizontally STRAIGHT BACK IN to X=0
       requestAnimationFrame(() => {
         api.start(i => {
           if (i === currentTopIndex) {
-            const newPos = order.current.indexOf(i);
             return {
-              y: newPos * 20, // Slide up into the back
+              x: 0, 
               config: { mass: 1, tension: 250, friction: 30 }, 
               immediate: false
             };
