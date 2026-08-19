@@ -168,7 +168,8 @@ body {
   -webkit-touch-callout: none;
   touch-action: none;
   will-change: transform;
-  font-size: clamp(8px, 3.2cqi, 15px); /* More aggressive fluid scaling for dense content */
+  font-size: clamp(9.5px, 3.6cqi, 16px); /* Increased fluid size for readability */
+  line-height: 1.35; /* Tighter line height prevents larger text from overflowing vertically */
 }
 
 .card-design-inner {

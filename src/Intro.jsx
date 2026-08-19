@@ -6,35 +6,28 @@ export default function Intro({ onComplete }) {
   const scrollRef = useRef(0);
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.code === 'Space' && phase === 0) {
-        e.preventDefault();
+    const handleGlobalInteraction = () => {
+      if (phase === 0) {
         setPhase(1);
         setTimeout(() => setPhase(2), 2500);
+      } else if (phase === 2) {
+        setPhase(3); // Trigger shatter
+        setTimeout(() => onComplete(), 400); // Fast completion
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [phase]);
+    window.addEventListener('pointerdown', handleGlobalInteraction);
+    
+    // Fallback for laptops with trackpads/scroll wheels
+    const handleScroll = () => {
+      if (phase === 2) handleGlobalInteraction();
+    };
+    window.addEventListener('wheel', handleScroll, { passive: true });
 
-  useEffect(() => {
-    if (phase >= 2) {
-      const handleScroll = (e) => {
-        if (phase === 2) {
-          setPhase(3); // Trigger shatter
-          setTimeout(() => onComplete(), 400); // Fast completion
-        }
-      };
-      window.addEventListener('wheel', handleScroll, { passive: true });
-      window.addEventListener('touchmove', handleScroll, { passive: true });
-      window.addEventListener('click', handleScroll);
-      return () => {
-        window.removeEventListener('wheel', handleScroll);
-        window.removeEventListener('touchmove', handleScroll);
-        window.removeEventListener('click', handleScroll);
-      };
-    }
+    return () => {
+      window.removeEventListener('pointerdown', handleGlobalInteraction);
+      window.removeEventListener('wheel', handleScroll);
+    };
   }, [phase, onComplete]);
 
   // Generate random scatter values for each letter
@@ -64,13 +57,7 @@ export default function Intro({ onComplete }) {
   return (
     <div 
       className="intro-container"
-      onClick={() => {
-        if (phase === 0) {
-          setPhase(1);
-          setTimeout(() => setPhase(2), 2500);
-        }
-      }}
-      style={{ cursor: phase === 0 ? 'pointer' : 'default' }}
+      style={{ cursor: phase === 0 || phase === 2 ? 'pointer' : 'default' }}
     >
       {phase === 0 && (
         <div className="spacebar-prompt">
