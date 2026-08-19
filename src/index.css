@@ -45,6 +45,10 @@ body {
 .spacebar-prompt {
   text-align: center;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .spacebar-prompt h1 {
@@ -54,6 +58,7 @@ body {
   position: relative;
   z-index: 2;
   mix-blend-mode: difference;
+  width: 100%;
 }
 
 .geometric-shape {
