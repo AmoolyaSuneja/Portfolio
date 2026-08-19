@@ -18,8 +18,7 @@ export default function Portfolio() {
 
   const getSpringProps = (positionIndex) => ({
     x: 0,
-    y: positionIndex * 20,
-    scale: 1 - positionIndex * 0.05,
+    y: positionIndex * 15, // Staggered downwards by 15px
     rot: 0,
     zIndex: cardsData.length - positionIndex,
     config: { mass: 1, tension: 400, friction: 30 }
@@ -36,7 +35,7 @@ export default function Portfolio() {
 
     // Shorter, cleaner distance for desktop. Mobile goes completely off screen.
     const isMobile = window.innerWidth < 600;
-    const exitX = isMobile ? window.innerWidth + 100 : 700;
+    const exitX = isMobile ? window.innerWidth + 100 : 600;
 
     api.start(i => {
       const newPos = order.current.indexOf(i);
@@ -44,14 +43,13 @@ export default function Portfolio() {
         return {
           x: exitX * dir, 
           rot: dir * 15,
-          config: { mass: 1, tension: 400, friction: 35 } // Removed velocity config to stop deformed mobile flicks
+          config: { mass: 1, tension: 400, friction: 35 } 
         };
       } else {
         return {
           x: 0,
           rot: 0,
-          y: newPos * 20,
-          scale: 1 - newPos * 0.05,
+          y: newPos * 15,
           zIndex: cardsData.length - newPos,
           config: { mass: 1, tension: 300, friction: 30 },
           immediate: (key) => key === 'zIndex'
@@ -61,27 +59,26 @@ export default function Portfolio() {
 
     // Yank it back while it's completely off-screen
     setTimeout(() => {
-      // 1. Instantly drop zIndex and scale while it is still off-screen (X is still exitX)
+      // 1. Instantly drop ONLY the zIndex! Do not snap Y or Rot!
       api.start(i => {
         if (i === currentTopIndex) {
           const newPos = order.current.indexOf(i);
           return {
-            rot: 0,
-            y: newPos * 20,
             zIndex: cardsData.length - newPos,
-            immediate: key => ['zIndex', 'rot', 'y'].includes(key) // Instant snap for everything EXCEPT X and Scale!
+            immediate: key => key === 'zIndex' // ONLY SNAP Z-INDEX!
           };
         }
       });
 
-      // 2. Next frame, smoothly slide it horizontally STRAIGHT BACK IN to X=0, and smoothly shrink it to fit the 3D stack!
+      // 2. Next frame, smoothly slide it naturally back into its position!
       requestAnimationFrame(() => {
         api.start(i => {
           if (i === currentTopIndex) {
             const newPos = order.current.indexOf(i);
             return {
               x: 0, 
-              scale: 1 - newPos * 0.05, 
+              y: newPos * 15,
+              rot: 0,
               config: { mass: 1, tension: 250, friction: 30 }, 
               immediate: false
             };
@@ -114,7 +111,6 @@ export default function Portfolio() {
         if (i !== index) return;
         return {
           x: down ? mx : 0,
-          scale: down ? 1.02 : 1,
           rot: down ? mx / 30 : 0,
           config: { friction: 50, tension: down ? 800 : 500 },
           immediate: down // CRITICAL: Stop physics engine from fighting the mouse while dragging
@@ -131,7 +127,7 @@ export default function Portfolio() {
       transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
     >
       <div className="deck">
-        {springs.map(({ x, y, scale, rot, zIndex }, i) => {
+        {springs.map(({ x, y, rot, zIndex }, i) => {
           const isTop = order.current[0] === i;
           return (
             <animated.div
@@ -141,7 +137,6 @@ export default function Portfolio() {
               style={{
                 x,
                 y,
-                scale,
                 rotateZ: rot,
                 zIndex,
                 cursor: isTop ? 'grab' : 'default',
