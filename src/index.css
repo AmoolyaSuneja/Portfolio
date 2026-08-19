@@ -123,6 +123,7 @@ body {
   .spacebar-prompt h1 { font-size: 1.5rem; } /* Shrink on mobile so it doesn't wrap! */
   .mobile-text { display: block !important; text-align: center; }
   .desktop-text { display: none !important; }
+  .scroll-line { display: none; }
   
   .instruction-text { text-align: center; }
 }
