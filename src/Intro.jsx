@@ -81,7 +81,7 @@ export default function Intro({ onComplete }) {
 
       {phase >= 2 && (
         <div className="welcome-screen">
-          <div className="shatter-text-container" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div className="shatter-text-container" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', transform: 'translateY(-4vh)' }}>
             <h2 style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', width: '100%', marginBottom: '1rem' }}>
               {line1.map((char, i) => (
                 <motion.span
