@@ -31,7 +31,8 @@ body {
 /* ---------------- INTRO SEQUENCE ---------------- */
 .intro-container {
   height: 100vh;
-  width: 100vw;
+  height: 100dvh; /* Fix for mobile address bars */
+  width: 100%; /* Prevent horizontal scrollbar shift */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,6 +55,7 @@ body {
 .spacebar-prompt h1 {
   font-size: 2rem;
   letter-spacing: 0.1em;
+  margin-right: -0.1em; /* Optically center text with letter-spacing */
   text-transform: uppercase;
   position: relative;
   z-index: 2;
@@ -122,7 +124,6 @@ body {
   .mobile-text { display: block !important; text-align: center; }
   .desktop-text { display: none !important; }
   
-  .deck { margin: 0 auto; }
   .instruction-text { text-align: center; }
 }
 
@@ -145,6 +146,8 @@ body {
 /* ---------------- DECK OF CARDS ---------------- */
 .portfolio-deck-container {
   min-height: 100vh;
+  min-height: 100dvh; /* Fix for mobile address bars */
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
