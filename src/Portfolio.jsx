@@ -36,33 +36,15 @@ export default function Portfolio() {
     // Logically shift the deck instantly
     order.current.push(order.current.shift());
 
+    // 1. Explode the top card outward very fast
     api.start(i => {
       const newPos = order.current.indexOf(i);
       
       if (i === currentTopIndex) {
         return {
-          to: async (next) => {
-            // 1. Fly completely off screen
-            await next({
-              x: 600 * dir,
-              rot: dir * 15,
-              config: { mass: 0.5, tension: 300, friction: 20 }
-            });
-            
-            // 2. Drop behind the deck instantly (while safely off screen)
-            await next({ zIndex: cardsData.length - newPos, immediate: true });
-            
-            // 3. Smoothly slide back into the back slot
-            await next({
-              x: 0,
-              rot: 0,
-              y: newPos * 20,
-              scale: 1 - newPos * 0.05,
-              config: { mass: 1, tension: 250, friction: 30 }
-            });
-            
-            isAnimating.current = false;
-          }
+          x: 600 * dir, // Far enough to clear the deck
+          rot: dir * 15,
+          config: { mass: 0.5, tension: 700, friction: 30 } // High tension for snappy exit
         };
       } else {
         // Other cards smoothly slide up to take the empty space immediately
@@ -77,6 +59,29 @@ export default function Portfolio() {
         };
       }
     });
+
+    // 2. Yank it back the exact millisecond it clears the deck (~180ms)
+    setTimeout(() => {
+      api.start(i => {
+        if (i === currentTopIndex) {
+          const newPos = order.current.indexOf(i);
+          return {
+            x: 0,
+            rot: 0,
+            y: newPos * 20,
+            scale: 1 - newPos * 0.05,
+            zIndex: cardsData.length - newPos,
+            config: { mass: 1, tension: 350, friction: 30 }, // Snappy return
+            immediate: key => key === 'zIndex'
+          };
+        }
+      });
+
+      // Unlock interaction once the return animation settles
+      setTimeout(() => {
+        isAnimating.current = false;
+      }, 350);
+    }, 180);
   };
 
   const bind = useDrag(({ args: [index], down, movement: [mx], direction: [xDir], velocity: [vx], event }) => {
