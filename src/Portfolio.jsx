@@ -27,23 +27,24 @@ export default function Portfolio() {
 
   const [springs, api] = useSprings(cardsData.length, i => getSpringProps(order.current.indexOf(i)));
 
-  const cycleDeck = (dir = 1, velocity = 0) => {
+  const cycleDeck = (dir = 1) => {
     if (isAnimating.current) return;
     isAnimating.current = true;
 
     const currentTopIndex = order.current[0];
     order.current.push(order.current.shift());
 
-    // Fly completely off-screen on BOTH desktop and mobile so the reversal is invisible
-    const exitX = (window.innerWidth / 2 + 300) * dir;
+    // Shorter, cleaner distance for desktop. Mobile goes completely off screen.
+    const isMobile = window.innerWidth < 600;
+    const exitX = isMobile ? window.innerWidth + 100 : 700;
 
     api.start(i => {
       const newPos = order.current.indexOf(i);
       if (i === currentTopIndex) {
         return {
-          x: exitX, 
+          x: exitX * dir, 
           rot: dir * 15,
-          config: { mass: 1, tension: 400, friction: 35, velocity: velocity } 
+          config: { mass: 1, tension: 400, friction: 35 } // Removed velocity config to stop deformed mobile flicks
         };
       } else {
         return {
@@ -70,7 +71,8 @@ export default function Portfolio() {
             scale: 1 - newPos * 0.05,
             zIndex: cardsData.length - newPos,
             config: { mass: 1, tension: 250, friction: 30 }, 
-            immediate: key => key === 'zIndex'
+            // Teleport X and Rot instantly behind the deck so it is perfectly hidden, then slide Y vertically down!
+            immediate: key => ['zIndex', 'x', 'rot'].includes(key)
           };
         }
       });
@@ -78,7 +80,7 @@ export default function Portfolio() {
       setTimeout(() => {
         isAnimating.current = false;
       }, 350);
-    }, 200); // 200ms ensures it's off-screen but keeps the cycle feeling fast!
+    }, 200); 
   };
 
   const bind = useDrag(({ args: [index], down, movement: [mx], direction: [xDir], velocity: [vx], event }) => {
@@ -89,11 +91,11 @@ export default function Portfolio() {
     if (event.target.tagName === 'A' || event.target.tagName === 'SPAN') return;
 
     if (!down && (vx > 0.3 || Math.abs(mx) > 100)) {
-      // Swiped! Pass velocity to preserve momentum
-      cycleDeck(mx > 0 ? 1 : -1, vx * xDir); 
+      // Swiped!
+      cycleDeck(mx > 0 ? 1 : -1); 
     } else if (!down && Math.abs(mx) < 5) {
       // Clicked!
-      cycleDeck(1, 0);
+      cycleDeck(1);
     } else {
       // Dragging
       api.start(i => {
