@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 export default function Intro({ onComplete }) {
-  const [phase, setPhase] = useState(0); 
+  const [phase, setPhase] = useState(2); 
   const scrollRef = useRef(0);
 
   useEffect(() => {
@@ -13,10 +13,7 @@ export default function Intro({ onComplete }) {
         e.preventDefault();
       }
 
-      if (phase === 0) {
-        setPhase(1);
-        setTimeout(() => setPhase(2), 2500);
-      } else if (phase === 2) {
+      if (phase === 2) {
         setPhase(3); // Trigger shatter
         setTimeout(() => onComplete(), 400); // Fast completion
       }
@@ -46,7 +43,7 @@ export default function Intro({ onComplete }) {
     
     return {
       initial: { opacity: 0, scale: 0.5 },
-      visible: { opacity: 1, scale: 1, transition: { duration: 0.5, delay: index * 0.02 } },
+      visible: { opacity: 1, scale: 1, transition: { duration: 0.8, delay: 0.4 + index * 0.04 } },
       scatter: { 
         x: randomX, 
         y: randomY, 
@@ -65,20 +62,8 @@ export default function Intro({ onComplete }) {
   return (
     <div 
       className="intro-container"
-      style={{ cursor: phase === 0 || phase === 2 ? 'pointer' : 'default' }}
+      style={{ cursor: phase === 2 ? 'pointer' : 'default' }}
     >
-      {phase === 0 && (
-        <div className="spacebar-prompt">
-          <div className="geometric-shape"></div>
-          <h1 className="desktop-text">Hit space bar</h1>
-          <h1 className="mobile-text">Click to proceed</h1>
-        </div>
-      )}
-
-      {phase === 1 && (
-        <div className="expanding-shape"></div>
-      )}
-
       {phase >= 2 && (
         <div className="welcome-screen">
           <div className="shatter-text-container" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', transform: 'translateY(-4vh)' }}>
