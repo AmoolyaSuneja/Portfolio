@@ -149,8 +149,7 @@ export default function Portfolio() {
 function HeroSection() {
   return (
     <section className="card-section hero-card">
-      <h1>Amoolya Suneja</h1>
-      <h2>Full-Stack Developer</h2>
+      <h1>Full-Stack Developer</h1>
       <p className="tagline">Building robust and scalable web applications.</p>
     </section>
   );
