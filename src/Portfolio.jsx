@@ -218,7 +218,7 @@ function ProjectsSection() {
           <h4>VaultX</h4>
           <div className="project-links">
             <a href="https://vault-x-red.vercel.app/" target="_blank" rel="noreferrer" className="btn-small" onClick={(e) => e.stopPropagation()}>Live Demo</a>
-            <span className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</span>
+            <a href="https://github.com/AmoolyaSuneja/VaultX" target="_blank" rel="noreferrer" className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</a>
           </div>
         </div>
         <p className="tech-stack">React 18, TypeScript, Vite, Node.js, MongoDB</p>
@@ -229,7 +229,7 @@ function ProjectsSection() {
           <h4>PixelVerse</h4>
           <div className="project-links">
             <a href="https://pixelversepv.vercel.app/" target="_blank" rel="noreferrer" className="btn-small" onClick={(e) => e.stopPropagation()}>Live Demo</a>
-            <span className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</span>
+            <a href="https://github.com/AmoolyaSuneja/PixelVerse" target="_blank" rel="noreferrer" className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</a>
           </div>
         </div>
         <p className="tech-stack">React 19, Tailwind CSS, Prisma, Node.js</p>
@@ -240,7 +240,7 @@ function ProjectsSection() {
           <h4>SketchSphere</h4>
           <div className="project-links">
             <a href="https://sketch-sphere-opal.vercel.app/" target="_blank" rel="noreferrer" className="btn-small" onClick={(e) => e.stopPropagation()}>Live Demo</a>
-            <span className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</span>
+            <a href="https://github.com/AmoolyaSuneja/SketchSphere" target="_blank" rel="noreferrer" className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</a>
           </div>
         </div>
         <p className="tech-stack">React, WebSockets, HTML5 Canvas, AI</p>
