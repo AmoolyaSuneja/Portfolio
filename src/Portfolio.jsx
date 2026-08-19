@@ -33,46 +33,50 @@ export default function Portfolio() {
 
     const currentTopIndex = order.current[0];
     
-    // 1. Throw off screen horizontally
+    // Logically shift the deck instantly
+    order.current.push(order.current.shift());
+
     api.start(i => {
+      const newPos = order.current.indexOf(i);
+      
       if (i === currentTopIndex) {
         return {
-          x: 600 * dir,
-          rot: dir * 15,
-          config: { mass: 0.5, tension: 300, friction: 25 }
+          to: async (next) => {
+            // 1. Fly completely off screen
+            await next({
+              x: 600 * dir,
+              rot: dir * 15,
+              config: { mass: 0.5, tension: 300, friction: 20 }
+            });
+            
+            // 2. Drop behind the deck instantly (while safely off screen)
+            await next({ zIndex: cardsData.length - newPos, immediate: true });
+            
+            // 3. Smoothly slide back into the back slot
+            await next({
+              x: 0,
+              rot: 0,
+              y: newPos * 20,
+              scale: 1 - newPos * 0.05,
+              config: { mass: 1, tension: 250, friction: 30 }
+            });
+            
+            isAnimating.current = false;
+          }
+        };
+      } else {
+        // Other cards smoothly slide up to take the empty space immediately
+        return {
+          x: 0,
+          rot: 0,
+          y: newPos * 20,
+          scale: 1 - newPos * 0.05,
+          zIndex: cardsData.length - newPos,
+          config: { mass: 1, tension: 300, friction: 30 },
+          immediate: (key) => key === 'zIndex'
         };
       }
     });
-
-    // 2. Wait for throw, then instantly shift it to the back and slide the rest up
-    setTimeout(() => {
-      order.current.push(order.current.shift());
-      
-      api.start(i => {
-        const newPos = order.current.indexOf(i);
-        if (i === currentTopIndex) {
-          // Drop zIndex instantly so it goes behind, but animate the physical slide back into the deck!
-          return {
-            x: 0,
-            rot: 0,
-            y: newPos * 20,
-            scale: 1 - newPos * 0.05,
-            zIndex: cardsData.length - newPos,
-            config: { mass: 1, tension: 300, friction: 30 },
-            immediate: (key) => key === 'zIndex'
-          };
-        } else {
-          // Animate the rest sliding up
-          return getSpringProps(newPos);
-        }
-      });
-
-    // Unlock after the settling animation has mostly finished
-      setTimeout(() => {
-        isAnimating.current = false;
-      }, 400); // Slightly longer lock to ensure smooth settling
-
-    }, 300); // Let the throw outward finish more before pulling it back
   };
 
   const bind = useDrag(({ args: [index], down, movement: [mx], direction: [xDir], velocity: [vx], event }) => {
