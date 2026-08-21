@@ -33,19 +33,49 @@ export default function Portfolio() {
     const currentTopIndex = order.current[0];
     order.current.push(order.current.shift());
 
-    // Shorter, cleaner distance for desktop. Mobile goes completely off screen.
+    // Slide out distance: just enough to look good, not fling off into space
     const isMobile = window.innerWidth < 600;
-    const exitX = isMobile ? window.innerWidth + 100 : 600;
+    const exitX = isMobile ? window.innerWidth * 0.6 : 350;
 
     api.start(i => {
       const newPos = order.current.indexOf(i);
+      
       if (i === currentTopIndex) {
+        // Phase 1: Smoothly slide out to the side
         return {
           x: exitX * dir, 
           rot: dir * 15,
-          config: { mass: 1, tension: 400, friction: 35 } 
+          config: { mass: 1, tension: 180, friction: 28 }, // Smooth and gentle, not aggressive
+          onRest: () => {
+            // Phase 2: Instantly drop to the back of the deck
+            api.start(j => {
+              if (j !== currentTopIndex) return;
+              return {
+                zIndex: cardsData.length - newPos,
+                immediate: true // instantly drop z-index
+              };
+            });
+
+            // Phase 3: Smoothly slide back into the stack from the side
+            requestAnimationFrame(() => {
+              api.start(j => {
+                if (j !== currentTopIndex) return;
+                return {
+                  x: 0, 
+                  y: newPos * 15,
+                  rot: 0,
+                  config: { mass: 1, tension: 200, friction: 30 }, // Smoothly returns
+                  immediate: false,
+                  onRest: () => {
+                    isAnimating.current = false;
+                  }
+                };
+              });
+            });
+          }
         };
       } else {
+        // Other cards move up
         return {
           x: 0,
           rot: 0,
@@ -56,40 +86,6 @@ export default function Portfolio() {
         };
       }
     });
-
-    // Yank it back while it's completely off-screen
-    setTimeout(() => {
-      // 1. Instantly drop ONLY the zIndex! Do not snap Y or Rot!
-      api.start(i => {
-        if (i === currentTopIndex) {
-          const newPos = order.current.indexOf(i);
-          return {
-            zIndex: cardsData.length - newPos,
-            immediate: key => key === 'zIndex' // ONLY SNAP Z-INDEX!
-          };
-        }
-      });
-
-      // 2. Next frame, smoothly slide it naturally back into its position!
-      requestAnimationFrame(() => {
-        api.start(i => {
-          if (i === currentTopIndex) {
-            const newPos = order.current.indexOf(i);
-            return {
-              x: 0, 
-              y: newPos * 15,
-              rot: 0,
-              config: { mass: 1, tension: 250, friction: 30 }, 
-              immediate: false
-            };
-          }
-        });
-      });
-
-      setTimeout(() => {
-        isAnimating.current = false;
-      }, 350);
-    }, 200); 
   };
 
   const bind = useDrag(({ args: [index], down, movement: [mx], direction: [xDir], velocity: [vx], event }) => {
@@ -122,8 +118,8 @@ export default function Portfolio() {
   return (
     <motion.div 
       className="portfolio-deck-container"
-      initial={{ y: '80vh', filter: 'blur(20px)', opacity: 0.2 }}
-      animate={{ y: 0, filter: 'blur(0px)', opacity: 1 }}
+      initial={{ y: '80vh', opacity: 0.2 }}
+      animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
     >
       <div className="deck">
