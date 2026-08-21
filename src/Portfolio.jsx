@@ -33,37 +33,19 @@ export default function Portfolio() {
     const currentTopIndex = order.current[0];
     order.current.push(order.current.shift());
 
-    // Slide out distance: ensure it goes COMPLETELY off-screen so we can snap it invisibly
-    const exitX = window.innerWidth + 150;
+    // Shorter, cleaner distance for desktop. Mobile goes completely off screen.
+    const isMobile = window.innerWidth < 600;
+    const exitX = isMobile ? window.innerWidth + 100 : 600;
 
     api.start(i => {
       const newPos = order.current.indexOf(i);
-      
       if (i === currentTopIndex) {
-        // Phase 1: Smoothly glide COMPLETELY off the screen
         return {
           x: exitX * dir, 
-          rot: dir * 20,
-          config: { mass: 1, tension: 120, friction: 22 }, // Smooth, graceful glide off-screen
-          onRest: () => {
-            // Phase 2: Once it's invisible off-screen, instantly snap it back to the center behind the deck
-            api.start(j => {
-              if (j !== currentTopIndex) return;
-              return {
-                x: 0,
-                y: newPos * 15,
-                rot: 0,
-                zIndex: cardsData.length - newPos,
-                immediate: true, // MUST be immediate so it doesn't visually slide back
-                onRest: () => {
-                  isAnimating.current = false;
-                }
-              };
-            });
-          }
+          rot: dir * 15,
+          config: { mass: 1, tension: 400, friction: 35 } 
         };
       } else {
-        // Other cards move up
         return {
           x: 0,
           rot: 0,
@@ -74,6 +56,40 @@ export default function Portfolio() {
         };
       }
     });
+
+    // Yank it back while it's completely off-screen
+    setTimeout(() => {
+      // 1. Instantly drop ONLY the zIndex! Do not snap Y or Rot!
+      api.start(i => {
+        if (i === currentTopIndex) {
+          const newPos = order.current.indexOf(i);
+          return {
+            zIndex: cardsData.length - newPos,
+            immediate: key => key === 'zIndex' // ONLY SNAP Z-INDEX!
+          };
+        }
+      });
+
+      // 2. Next frame, smoothly slide it naturally back into its position!
+      requestAnimationFrame(() => {
+        api.start(i => {
+          if (i === currentTopIndex) {
+            const newPos = order.current.indexOf(i);
+            return {
+              x: 0, 
+              y: newPos * 15,
+              rot: 0,
+              config: { mass: 1, tension: 250, friction: 30 }, 
+              immediate: false
+            };
+          }
+        });
+      });
+
+      setTimeout(() => {
+        isAnimating.current = false;
+      }, 350);
+    }, 200); 
   };
 
   const bind = useDrag(({ args: [index], down, movement: [mx], direction: [xDir], velocity: [vx], event }) => {
@@ -106,8 +122,8 @@ export default function Portfolio() {
   return (
     <motion.div 
       className="portfolio-deck-container"
-      initial={{ y: '80vh', opacity: 0.2 }}
-      animate={{ y: 0, opacity: 1 }}
+      initial={{ y: '80vh', filter: 'blur(20px)', opacity: 0.2 }}
+      animate={{ y: 0, filter: 'blur(0px)', opacity: 1 }}
       transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
     >
       <div className="deck">
@@ -213,33 +229,33 @@ function ProjectsSection() {
           <h4>VaultX</h4>
           <div className="project-links">
             <a href="https://vault-x-red.vercel.app/" target="_blank" rel="noreferrer" className="btn-small" onClick={(e) => e.stopPropagation()}>Live Demo</a>
-            <a href="https://github.com/AmoolyaSuneja/VaultX" target="_blank" rel="noreferrer" className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</a>
+            <span className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</span>
           </div>
         </div>
         <p className="tech-stack">React 18, TypeScript, Vite, Node.js, MongoDB</p>
-        <p className="project-desc">Secure Personal Vault with Multi-Party Authorization. Features AES-256-GCM encryption. Includes dual-approval workflows, time-locked entries, and nominee-based succession.</p>
+        <p className="project-desc">Secure Personal Vault with Multi-Party Authorization. Features AES-256-GCM encryption.</p>
       </div>
       <div className="project-item">
         <div className="project-header">
           <h4>PixelVerse</h4>
           <div className="project-links">
             <a href="https://pixelversepv.vercel.app/" target="_blank" rel="noreferrer" className="btn-small" onClick={(e) => e.stopPropagation()}>Live Demo</a>
-            <a href="https://github.com/AmoolyaSuneja/PixelVerse" target="_blank" rel="noreferrer" className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</a>
+            <span className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</span>
           </div>
         </div>
         <p className="tech-stack">React 19, Tailwind CSS, Prisma, Node.js</p>
-        <p className="project-desc">Full-Stack Real-Time 2D Web Metaverse featuring real-time arenas. Uses WebSockets for multiplayer state synchronization and Prisma for persistent game data.</p>
+        <p className="project-desc">Full-Stack Real-Time 2D Web Metaverse featuring real-time arenas.</p>
       </div>
       <div className="project-item">
         <div className="project-header">
           <h4>SketchSphere</h4>
           <div className="project-links">
             <a href="https://sketch-sphere-opal.vercel.app/" target="_blank" rel="noreferrer" className="btn-small" onClick={(e) => e.stopPropagation()}>Live Demo</a>
-            <a href="https://github.com/AmoolyaSuneja/SketchSphere" target="_blank" rel="noreferrer" className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</a>
+            <span className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</span>
           </div>
         </div>
         <p className="tech-stack">React, WebSockets, HTML5 Canvas, AI</p>
-        <p className="project-desc">Real-Time Collaborative Whiteboard with event-driven communication. Supports AI-assisted shape recognition, live presence, chat, and canvas export to PDF.</p>
+        <p className="project-desc">Real-Time Collaborative Whiteboard with event-driven communication.</p>
       </div>
     </section>
   );
@@ -282,7 +298,7 @@ function ContactSection() {
     <section className="card-section contact-card">
       <h3>Contact</h3>
       <div className="contact-links" style={{ flexDirection: 'column' }}>
-        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=asuneja007@gmail.com" target="_blank" rel="noreferrer" className="btn outline" onClick={(e) => e.stopPropagation()}>Email Me</a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=asuneja007@gmail.com" target="_blank" rel="noreferrer" className="btn" onClick={(e) => e.stopPropagation()}>Email Me</a>
         <a href="https://github.com/AmoolyaSuneja" target="_blank" rel="noreferrer" className="btn outline" onClick={(e) => e.stopPropagation()}>GitHub</a>
         <a href="https://linkedin.com/in/amoolya-suneja" target="_blank" rel="noreferrer" className="btn outline" onClick={(e) => e.stopPropagation()}>LinkedIn</a>
       </div>
