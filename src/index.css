@@ -174,7 +174,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #ffffff; 
+  background-color: #fdfdfd; 
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
   border-radius: 16px; 
   box-shadow: 0 4px 15px rgba(0,0,0,0.4); 
   border: 1px solid #dcdcdc;
@@ -197,18 +198,44 @@ body {
 }
 
 .card-design-inner::before {
-  content: '';
+  display: none; /* Removed the hard border to fit the playing card aesthetic */
+}
+
+/* Playing Card Corner Indices */
+.card-corner {
   position: absolute;
-  top: 16px; left: 16px; right: 16px; bottom: 16px;
-  border: 1px solid #1a1a1a;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.6em; 
+  line-height: 1;
+  z-index: 10;
   pointer-events: none;
+  user-select: none;
+}
+
+.card-corner .rank {
+  letter-spacing: -0.05em;
+  margin-bottom: -0.1em;
+}
+
+.card-corner.top-left {
+  top: 14px;
+  left: 14px;
+}
+
+.card-corner.bottom-right {
+  bottom: 14px;
+  right: 14px;
+  transform: rotate(180deg);
 }
 
 .card-content {
   width: 100%;
   height: 100%;
-  padding: 0.8em 1em; /* Reduced vertical padding */
+  padding: 1.2em 2.2em; /* Adjusted padding to avoid corner indices */
   position: relative;
   z-index: 5;
   display: flex;

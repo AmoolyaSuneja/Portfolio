@@ -4,12 +4,12 @@ import { useSprings, animated } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 
 const cardsData = [
-  { id: 'hero', component: <HeroSection /> },
-  { id: 'about', component: <AboutSection /> },
-  { id: 'skills', component: <SkillsSection /> },
-  { id: 'projects', component: <ProjectsSection /> },
-  { id: 'experience', component: <ExperienceSection /> },
-  { id: 'contact', component: <ContactSection /> },
+  { id: 'hero', rank: 'A', suit: '♠', suitColor: '#1a1a1a', component: <HeroSection /> },
+  { id: 'about', rank: 'K', suit: '♥', suitColor: '#b91c1c', component: <AboutSection /> },
+  { id: 'skills', rank: 'Q', suit: '♦', suitColor: '#b91c1c', component: <SkillsSection /> },
+  { id: 'projects', rank: 'J', suit: '♣', suitColor: '#1a1a1a', component: <ProjectsSection /> },
+  { id: 'experience', rank: '10', suit: '♠', suitColor: '#1a1a1a', component: <ExperienceSection /> },
+  { id: 'contact', rank: '9', suit: '♥', suitColor: '#b91c1c', component: <ContactSection /> },
 ];
 
 export default function Portfolio() {
@@ -129,11 +129,12 @@ export default function Portfolio() {
       <div className="deck">
         {springs.map(({ x, y, rot, zIndex }, i) => {
           const isTop = order.current[0] === i;
+          const { id, rank, suit, suitColor, component } = cardsData[i];
           return (
             <animated.div
               {...bind(i)}
-              key={cardsData[i].id}
-              className="deck-card"
+              key={id}
+              className={`deck-card card-${id}`}
               style={{
                 x,
                 y,
@@ -144,8 +145,18 @@ export default function Portfolio() {
               }}
             >
               <div className="card-design-inner">
+                {/* Playing Card Corner Indices */}
+                <div className="card-corner top-left" style={{ color: suitColor }}>
+                  <div className="rank">{rank}</div>
+                  <div className="suit">{suit}</div>
+                </div>
+                <div className="card-corner bottom-right" style={{ color: suitColor }}>
+                  <div className="rank">{rank}</div>
+                  <div className="suit">{suit}</div>
+                </div>
+
                 <div className="card-content">
-                  {cardsData[i].component}
+                  {component}
                 </div>
               </div>
             </animated.div>
