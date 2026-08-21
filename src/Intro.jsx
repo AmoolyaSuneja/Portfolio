@@ -50,7 +50,6 @@ export default function Intro({ onComplete }) {
         rotate: randomRotate,
         opacity: 0,
         scale: 0,
-        filter: "blur(10px)",
         transition: { duration: 1, ease: "easeInOut" }
       }
     };
