@@ -298,7 +298,7 @@ function ContactSection() {
     <section className="card-section contact-card">
       <h3>Contact</h3>
       <div className="contact-links" style={{ flexDirection: 'column' }}>
-        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=asuneja007@gmail.com" target="_blank" rel="noreferrer" className="btn" onClick={(e) => e.stopPropagation()}>Email Me</a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=asuneja007@gmail.com" target="_blank" rel="noreferrer" className="btn outline" onClick={(e) => e.stopPropagation()}>Email Me</a>
         <a href="https://github.com/AmoolyaSuneja" target="_blank" rel="noreferrer" className="btn outline" onClick={(e) => e.stopPropagation()}>GitHub</a>
         <a href="https://linkedin.com/in/amoolya-suneja" target="_blank" rel="noreferrer" className="btn outline" onClick={(e) => e.stopPropagation()}>LinkedIn</a>
       </div>

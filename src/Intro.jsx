@@ -101,7 +101,6 @@ export default function Intro({ onComplete }) {
             animate={{ opacity: phase === 3 ? 0 : 1 }}
             transition={{ delay: 1 }}
           >
-            <div className="scroll-line"></div>
             <span className="desktop-text">Scroll</span>
             <span className="mobile-text">Swipe / Tap</span>
           </motion.div>
