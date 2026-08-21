@@ -33,44 +33,32 @@ export default function Portfolio() {
     const currentTopIndex = order.current[0];
     order.current.push(order.current.shift());
 
-    // Slide out distance: just enough to look good, not fling off into space
-    const isMobile = window.innerWidth < 600;
-    const exitX = isMobile ? window.innerWidth * 0.6 : 350;
+    // Slide out distance: ensure it goes COMPLETELY off-screen so we can snap it invisibly
+    const exitX = window.innerWidth + 150;
 
     api.start(i => {
       const newPos = order.current.indexOf(i);
       
       if (i === currentTopIndex) {
-        // Phase 1: Smoothly slide out to the side
+        // Phase 1: Smoothly glide COMPLETELY off the screen
         return {
           x: exitX * dir, 
-          rot: dir * 15,
-          config: { mass: 1, tension: 180, friction: 28 }, // Smooth and gentle, not aggressive
+          rot: dir * 20,
+          config: { mass: 1, tension: 120, friction: 22 }, // Smooth, graceful glide off-screen
           onRest: () => {
-            // Phase 2: Instantly drop to the back of the deck
+            // Phase 2: Once it's invisible off-screen, instantly snap it back to the center behind the deck
             api.start(j => {
               if (j !== currentTopIndex) return;
               return {
+                x: 0,
+                y: newPos * 15,
+                rot: 0,
                 zIndex: cardsData.length - newPos,
-                immediate: true // instantly drop z-index
+                immediate: true, // MUST be immediate so it doesn't visually slide back
+                onRest: () => {
+                  isAnimating.current = false;
+                }
               };
-            });
-
-            // Phase 3: Smoothly slide back into the stack from the side
-            requestAnimationFrame(() => {
-              api.start(j => {
-                if (j !== currentTopIndex) return;
-                return {
-                  x: 0, 
-                  y: newPos * 15,
-                  rot: 0,
-                  config: { mass: 1, tension: 200, friction: 30 }, // Smoothly returns
-                  immediate: false,
-                  onRest: () => {
-                    isAnimating.current = false;
-                  }
-                };
-              });
             });
           }
         };
