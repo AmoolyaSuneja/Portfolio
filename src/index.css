@@ -216,6 +216,38 @@ body {
   user-select: none;
 }
 
+/* Layered Background Text */
+.card-bg-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-55deg);
+  font-size: 8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(0,0,0,0.05); /* Faint hollow stroke */
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+}
+
+/* Playing Card Classic Inner Border */
+.card-inner-border {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08); /* Faint elegant line */
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Playing Card Corner Indices */
 /* Playing Card Corner Indices */
 .card-corner {
   position: absolute;
@@ -229,6 +261,8 @@ body {
   z-index: 10;
   pointer-events: none;
   user-select: none;
+  background-color: #fcfcfc; /* Masks the inner border */
+  padding: 4px; /* Adds space around the text for the mask */
 }
 
 .card-corner .rank {
@@ -237,13 +271,13 @@ body {
 }
 
 .card-corner.top-left {
-  top: 14px;
-  left: 14px;
+  top: 10px;
+  left: 10px;
 }
 
 .card-corner.bottom-right {
-  bottom: 14px;
-  right: 14px;
+  bottom: 10px;
+  right: 10px;
   transform: rotate(180deg);
 }
 

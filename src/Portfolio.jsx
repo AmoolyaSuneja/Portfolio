@@ -4,12 +4,12 @@ import { useSprings, animated } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 
 const cardsData = [
-  { id: 'hero', rank: 'A', suit: '♠', suitColor: '#1a1a1a', component: <HeroSection /> },
-  { id: 'about', rank: 'K', suit: '♥', suitColor: '#b91c1c', component: <AboutSection /> },
-  { id: 'skills', rank: 'Q', suit: '♦', suitColor: '#b91c1c', component: <SkillsSection /> },
-  { id: 'projects', rank: 'J', suit: '♣', suitColor: '#1a1a1a', component: <ProjectsSection /> },
-  { id: 'experience', rank: '10', suit: '♠', suitColor: '#1a1a1a', component: <ExperienceSection /> },
-  { id: 'contact', rank: '9', suit: '♥', suitColor: '#b91c1c', component: <ContactSection /> },
+  { id: 'hero', rank: 'A', suit: '♠', suitColor: '#1a1a1a', bgText: 'AMOOLYA', component: <HeroSection /> },
+  { id: 'about', rank: 'K', suit: '♥', suitColor: '#b91c1c', bgText: 'DEVELOPER', component: <AboutSection /> },
+  { id: 'skills', rank: 'Q', suit: '♦', suitColor: '#b91c1c', bgText: 'ENGINEER', component: <SkillsSection /> },
+  { id: 'projects', rank: 'J', suit: '♣', suitColor: '#1a1a1a', bgText: 'PROJECTS', component: <ProjectsSection /> },
+  { id: 'experience', rank: '10', suit: '♠', suitColor: '#1a1a1a', bgText: 'CAREER', component: <ExperienceSection /> },
+  { id: 'contact', rank: '9', suit: '♥', suitColor: '#b91c1c', bgText: 'CONNECT', component: <ContactSection /> },
 ];
 
 export default function Portfolio() {
@@ -129,7 +129,7 @@ export default function Portfolio() {
       <div className="deck">
         {springs.map(({ x, y, rot, zIndex }, i) => {
           const isTop = order.current[0] === i;
-          const { id, rank, suit, suitColor, component } = cardsData[i];
+          const { id, rank, suit, suitColor, bgText, component } = cardsData[i];
           return (
             <animated.div
               {...bind(i)}
@@ -145,7 +145,11 @@ export default function Portfolio() {
               }}
             >
               <div className="card-design-inner">
-                {/* Playing Card Watermark */}
+                {/* Playing Card Classic Inner Border */}
+                <div className="card-inner-border"></div>
+
+                {/* Layered Background Character */}
+                <div className="card-bg-text">{bgText}</div>
                 <div className="card-watermark" style={{ color: suitColor }}>
                   {suit}
                 </div>
