@@ -140,7 +140,7 @@ export default function Portfolio() {
                 y,
                 rotateZ: rot,
                 zIndex,
-                cursor: isTop ? 'grab' : 'default',
+                cursor: 'grab',
                 touchAction: 'none'
               }}
             >
