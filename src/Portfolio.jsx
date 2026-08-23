@@ -145,6 +145,11 @@ export default function Portfolio() {
               }}
             >
               <div className="card-design-inner">
+                {/* Playing Card Watermark */}
+                <div className="card-watermark" style={{ color: suitColor }}>
+                  {suit}
+                </div>
+
                 {/* Playing Card Corner Indices */}
                 <div className="card-corner top-left" style={{ color: suitColor }}>
                   <div className="rank">{rank}</div>
