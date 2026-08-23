@@ -50,7 +50,7 @@ export default function Intro({ onComplete }) {
         rotate: randomRotate, 
         opacity: 0, 
         scale: 0,
-        transition: { duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: index * 0.015 } 
+        transition: { duration: 1, ease: "easeInOut" } 
       }
     };
   };

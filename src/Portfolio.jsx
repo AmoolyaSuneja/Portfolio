@@ -122,9 +122,9 @@ export default function Portfolio() {
   return (
     <motion.div 
       className="portfolio-deck-container"
-      initial={{ y: '15vh', opacity: 0 }}
+      initial={{ y: '80vh', opacity: 0.2 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
     >
       <div className="deck">
         {springs.map(({ x, y, rot, zIndex }, i) => {
