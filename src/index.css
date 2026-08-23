@@ -219,7 +219,7 @@ body {
 
 .card-corner .rank {
   letter-spacing: -0.05em;
-  margin-bottom: -0.1em;
+  margin-bottom: 0.05em; /* Changed from -0.1em to provide slight breathing room */
 }
 
 .card-corner.top-left {
