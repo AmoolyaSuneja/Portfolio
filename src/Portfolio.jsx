@@ -15,6 +15,7 @@ const cardsData = [
 export default function Portfolio() {
   const order = useRef([0, 1, 2, 3, 4, 5]);
   const isAnimating = useRef(false);
+  const lastCycleTime = useRef(0);
 
   const getSpringProps = (positionIndex) => ({
     x: 0,
@@ -29,6 +30,14 @@ export default function Portfolio() {
   const cycleDeck = (dir = 1) => {
     if (isAnimating.current) return;
     isAnimating.current = true;
+
+    // --- Dynamic Speed: only affects cooldown, NOT animation physics ---
+    const now = Date.now();
+    const timeSinceLast = now - lastCycleTime.current;
+    lastCycleTime.current = now;
+    // Rapid clicks (< 500ms apart) get a shorter cooldown so the next swipe fires sooner
+    const isRapid = timeSinceLast > 0 && timeSinceLast < 500;
+    const unlockDelay = isRapid ? 150 : 350;
 
     const currentTopIndex = order.current[0];
     order.current.push(order.current.shift());
@@ -88,7 +97,7 @@ export default function Portfolio() {
 
       setTimeout(() => {
         isAnimating.current = false;
-      }, 350);
+      }, unlockDelay);
     }, 200); 
   };
 
