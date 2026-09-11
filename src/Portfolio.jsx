@@ -35,9 +35,10 @@ export default function Portfolio() {
     const now = Date.now();
     const timeSinceLast = now - lastCycleTime.current;
     lastCycleTime.current = now;
-    // Rapid clicks (< 500ms apart) get a shorter cooldown so the next swipe fires sooner
+    // Rapid clicks (< 500ms apart) get much shorter cooldowns
     const isRapid = timeSinceLast > 0 && timeSinceLast < 500;
-    const unlockDelay = isRapid ? 150 : 350;
+    const exitTimeout = isRapid ? 120 : 200;
+    const unlockDelay = isRapid ? 80 : 350;
 
     const currentTopIndex = order.current[0];
     order.current.push(order.current.shift());
@@ -98,7 +99,7 @@ export default function Portfolio() {
       setTimeout(() => {
         isAnimating.current = false;
       }, unlockDelay);
-    }, 200); 
+    }, exitTimeout); 
   };
 
   const bind = useDrag(({ args: [index], down, movement: [mx], direction: [xDir], velocity: [vx], event }) => {
