@@ -15,7 +15,6 @@ const cardsData = [
 export default function Portfolio() {
   const order = useRef([0, 1, 2, 3, 4, 5]);
   const isAnimating = useRef(false);
-  const lastCycleTime = useRef(0);
 
   const getSpringProps = (positionIndex) => ({
     x: 0,
@@ -31,21 +30,6 @@ export default function Portfolio() {
     if (isAnimating.current) return;
     isAnimating.current = true;
 
-    // --- Dynamic Speed ---
-    const now = Date.now();
-    const timeSinceLast = now - lastCycleTime.current;
-    lastCycleTime.current = now;
-
-    // Clamp speed factor: 1.0 (slow/first click) to 2.5 (rapid fire)
-    const speedFactor = lastCycleTime.current === now && timeSinceLast === 0
-      ? 1.0
-      : Math.min(2.5, Math.max(1.0, 600 / Math.max(timeSinceLast, 100)));
-
-    const baseTension = 400;
-    const tension = baseTension * speedFactor;
-    const exitTimeout = Math.max(80, Math.round(200 / speedFactor));
-    const unlockTimeout = Math.max(120, Math.round(350 / speedFactor));
-
     const currentTopIndex = order.current[0];
     order.current.push(order.current.shift());
 
@@ -59,7 +43,7 @@ export default function Portfolio() {
         return {
           x: exitX * dir, 
           rot: dir * 15,
-          config: { mass: 1, tension: tension, friction: 35 } 
+          config: { mass: 1, tension: 400, friction: 35 } 
         };
       } else {
         return {
@@ -67,7 +51,7 @@ export default function Portfolio() {
           rot: 0,
           y: newPos * 15,
           zIndex: cardsData.length - newPos,
-          config: { mass: 1, tension: tension * 0.75, friction: 30 },
+          config: { mass: 1, tension: 300, friction: 30 },
           immediate: (key) => key === 'zIndex'
         };
       }
@@ -104,8 +88,8 @@ export default function Portfolio() {
 
       setTimeout(() => {
         isAnimating.current = false;
-      }, unlockTimeout);
-    }, exitTimeout); 
+      }, 350);
+    }, 200); 
   };
 
   const bind = useDrag(({ args: [index], down, movement: [mx], direction: [xDir], velocity: [vx], event }) => {
