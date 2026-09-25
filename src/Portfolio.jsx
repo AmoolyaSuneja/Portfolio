@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useSprings, animated } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
@@ -15,11 +15,12 @@ const cardsData = [
 export default function Portfolio() {
   const order = useRef([0, 1, 2, 3, 4, 5]);
   const isAnimating = useRef(false);
+  const [animating, setAnimating] = useState(false);
   const lastCycleTime = useRef(0);
 
   const getSpringProps = (positionIndex) => ({
     x: 0,
-    y: positionIndex * 15, // Staggered downwards by 15px
+    y: positionIndex * 15,
     rot: 0,
     zIndex: cardsData.length - positionIndex,
     config: { mass: 1, tension: 400, friction: 30 }
@@ -30,12 +31,13 @@ export default function Portfolio() {
   const cycleDeck = (dir = 1) => {
     if (isAnimating.current) return;
     isAnimating.current = true;
+    setAnimating(true);
 
-    // --- Dynamic Speed: only affects cooldown, NOT animation physics ---
+
     const now = Date.now();
     const timeSinceLast = now - lastCycleTime.current;
     lastCycleTime.current = now;
-    // Rapid clicks (< 500ms apart) get much shorter cooldowns
+
     const isRapid = timeSinceLast > 0 && timeSinceLast < 500;
     const exitTimeout = isRapid ? 120 : 200;
     const unlockDelay = isRapid ? 80 : 350;
@@ -43,7 +45,7 @@ export default function Portfolio() {
     const currentTopIndex = order.current[0];
     order.current.push(order.current.shift());
 
-    // Shorter, cleaner distance for desktop. Mobile goes completely off screen.
+
     const isMobile = window.innerWidth < 600;
     const exitX = isMobile ? window.innerWidth + 100 : 600;
 
@@ -67,20 +69,20 @@ export default function Portfolio() {
       }
     });
 
-    // Yank it back while it's completely off-screen
+
     setTimeout(() => {
-      // 1. Instantly drop ONLY the zIndex! Do not snap Y or Rot!
+
       api.start(i => {
         if (i === currentTopIndex) {
           const newPos = order.current.indexOf(i);
           return {
             zIndex: cardsData.length - newPos,
-            immediate: key => key === 'zIndex' // ONLY SNAP Z-INDEX!
+            immediate: key => key === 'zIndex'
           };
         }
       });
 
-      // 2. Next frame, smoothly slide it naturally back into its position!
+
       requestAnimationFrame(() => {
         api.start(i => {
           if (i === currentTopIndex) {
@@ -98,6 +100,7 @@ export default function Portfolio() {
 
       setTimeout(() => {
         isAnimating.current = false;
+        setAnimating(false);
       }, unlockDelay);
     }, exitTimeout); 
   };
@@ -106,24 +109,21 @@ export default function Portfolio() {
     const isTop = order.current[0] === index;
     if (!isTop || isAnimating.current) return; 
 
-    // Prevent dragging if they clicked a button/link inside the card
+
     if (event.target.tagName === 'A' || event.target.tagName === 'SPAN') return;
 
     if (!down && (vx > 0.3 || Math.abs(mx) > 100)) {
-      // Swiped!
       cycleDeck(mx > 0 ? 1 : -1); 
     } else if (!down && Math.abs(mx) < 5) {
-      // Clicked!
       cycleDeck(1);
     } else {
-      // Dragging
       api.start(i => {
         if (i !== index) return;
         return {
           x: down ? mx : 0,
           rot: down ? mx / 30 : 0,
           config: { friction: 50, tension: down ? 800 : 500 },
-          immediate: down // CRITICAL: Stop physics engine from fighting the mouse while dragging
+          immediate: down
         };
       });
     }
@@ -155,12 +155,11 @@ export default function Portfolio() {
               }}
             >
               <div className="card-design-inner">
-                {/* Playing Card Watermark */}
                 <div className="card-watermark" style={{ color: suitColor }}>
                   {suit}
                 </div>
 
-                {/* Playing Card Corner Indices */}
+
                 <div className="card-corner top-left" style={{ color: suitColor }}>
                   <div className="rank">{rank}</div>
                   <div className="suit">{suit}</div>
@@ -178,14 +177,30 @@ export default function Portfolio() {
           );
         })}
       </div>
-      <div className="instruction-text">
-        <p>Swipe or click to deal</p>
+      <div className="deck-nav">
+        <button
+          className="deck-nav-btn"
+          onClick={() => cycleDeck(-1)}
+          disabled={animating}
+          aria-label="Previous card"
+        >
+          ← Prev
+        </button>
+        <span className="deck-nav-hint">Swipe or click to deal</span>
+        <button
+          className="deck-nav-btn"
+          onClick={() => cycleDeck(1)}
+          disabled={animating}
+          aria-label="Next card"
+        >
+          Next →
+        </button>
       </div>
     </motion.div>
   );
 }
 
-// ----------------- SUBCOMPONENTS -----------------
+
 
 function HeroSection() {
   return (
@@ -244,7 +259,7 @@ function ProjectsSection() {
           <h4>VaultX</h4>
           <div className="project-links">
             <a href="https://vault-x-red.vercel.app/" target="_blank" rel="noreferrer" className="btn-small" onClick={(e) => e.stopPropagation()}>Live Demo</a>
-            <span className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</span>
+            <a href="https://github.com/AmoolyaSuneja/VaultX" target="_blank" rel="noreferrer" className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</a>
           </div>
         </div>
         <p className="tech-stack">React 18, TypeScript, Vite, Node.js, MongoDB</p>
@@ -255,7 +270,7 @@ function ProjectsSection() {
           <h4>PixelVerse</h4>
           <div className="project-links">
             <a href="https://pixelversepv.vercel.app/" target="_blank" rel="noreferrer" className="btn-small" onClick={(e) => e.stopPropagation()}>Live Demo</a>
-            <span className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</span>
+            <a href="https://github.com/AmoolyaSuneja/PixelVerse" target="_blank" rel="noreferrer" className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</a>
           </div>
         </div>
         <p className="tech-stack">React 19, Tailwind CSS, Prisma, Node.js</p>
@@ -266,7 +281,7 @@ function ProjectsSection() {
           <h4>SketchSphere</h4>
           <div className="project-links">
             <a href="https://sketch-sphere-opal.vercel.app/" target="_blank" rel="noreferrer" className="btn-small" onClick={(e) => e.stopPropagation()}>Live Demo</a>
-            <span className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</span>
+            <a href="https://github.com/AmoolyaSuneja/SketchSphere" target="_blank" rel="noreferrer" className="btn-small outline" onClick={(e) => e.stopPropagation()}>GitHub</a>
           </div>
         </div>
         <p className="tech-stack">React, WebSockets, HTML5 Canvas, AI</p>

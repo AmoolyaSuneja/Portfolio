@@ -7,22 +7,22 @@ export default function Intro({ onComplete }) {
 
   useEffect(() => {
     const handleGlobalInteraction = (e) => {
-      // If it's a keydown event, only proceed if it's the Space key
+
       if (e && e.type === 'keydown') {
         if (e.code !== 'Space') return;
         e.preventDefault();
       }
 
       if (phase === 2) {
-        setPhase(3); // Trigger shatter
-        setTimeout(() => onComplete(), 400); // Fast completion
+        setPhase(3);
+        setTimeout(() => onComplete(), 400);
       }
     };
 
     window.addEventListener('pointerdown', handleGlobalInteraction);
     window.addEventListener('keydown', handleGlobalInteraction);
     
-    // Fallback for laptops with trackpads/scroll wheels
+
     const handleScroll = () => {
       if (phase === 2) handleGlobalInteraction();
     };
@@ -35,7 +35,7 @@ export default function Intro({ onComplete }) {
     };
   }, [phase, onComplete]);
 
-  // Generate random scatter values for each letter
+
   const getScatterVariants = (index) => {
     const randomX = (Math.random() - 0.5) * 1000;
     const randomY = (Math.random() - 0.5) * 1000;

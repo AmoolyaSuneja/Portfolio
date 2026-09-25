@@ -16,7 +16,7 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  font-size: 0.95rem; /* Clean base size for Inter */
+  font-size: 0.95rem;
   background-color: #0a0a0c;
   background-image: 
     radial-gradient(circle at 50% 40%, rgba(40, 40, 45, 0.8) 0%, rgba(10, 10, 12, 1) 100%),
@@ -28,11 +28,11 @@ body {
   overflow-x: hidden;
 }
 
-/* ---------------- INTRO SEQUENCE ---------------- */
+
 .intro-container {
   height: 100vh;
-  height: 100dvh; /* Fix for mobile address bars */
-  width: 100%; /* Prevent horizontal scrollbar shift */
+  height: 100dvh;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -55,7 +55,7 @@ body {
 .spacebar-prompt h1 {
   font-size: 2rem;
   letter-spacing: 0.1em;
-  margin-right: -0.1em; /* Optically center text with letter-spacing */
+  margin-right: -0.1em;
   text-transform: uppercase;
   position: relative;
   z-index: 2;
@@ -120,7 +120,7 @@ body {
 @media (max-width: 600px) {
   .welcome-screen h2 { font-size: 2rem; }
   .welcome-screen h1 { font-size: 1rem; }
-  .spacebar-prompt h1 { font-size: 1.5rem; } /* Shrink on mobile so it doesn't wrap! */
+  .spacebar-prompt h1 { font-size: 1.5rem; }
   .mobile-text { display: block !important; text-align: center; }
   .desktop-text { display: none !important; }
   
@@ -147,10 +147,10 @@ body {
   background-color: var(--grey);
 }
 
-/* ---------------- DECK OF CARDS ---------------- */
+
 .portfolio-deck-container {
   min-height: 100vh;
-  min-height: 100dvh; /* Fix for mobile address bars */
+  min-height: 100dvh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -161,10 +161,10 @@ body {
 
 .deck {
   position: relative;
-  width: min(90vw, 420px, 60vh); /* Guaranteed to fit any orientation */
+  width: min(90vw, 420px, 60vh);
   aspect-ratio: 2.5 / 3.5;
   perspective: 1000px;
-  container-type: inline-size; /* Enable container fluid scaling */
+  container-type: inline-size;
 }
 
 .deck-card {
@@ -187,8 +187,8 @@ body {
   -webkit-touch-callout: none;
   touch-action: none;
   will-change: transform;
-  font-size: clamp(9.5px, 3.6cqi, 16px); /* Increased fluid size for readability */
-  line-height: 1.35; /* Tighter line height prevents larger text from overflowing vertically */
+  font-size: clamp(9.5px, 3.6cqi, 16px);
+  line-height: 1.35;
 }
 
 .card-design-inner {
@@ -199,24 +199,24 @@ body {
 }
 
 .card-design-inner::before {
-  display: none; /* Removed the hard border to fit the playing card aesthetic */
+  display: none;
 }
 
-/* Playing Card Watermark */
+
 .card-watermark {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 20rem; /* Massive size */
-  opacity: 0.035; /* Ultra faint, acts like a printed watermark */
-  z-index: 1; /* Below content */
+  font-size: 20rem;
+  opacity: 0.035;
+  z-index: 1;
   pointer-events: none;
   font-family: 'Playfair Display', serif;
   user-select: none;
 }
 
-/* Playing Card Corner Indices */
+
 .card-corner {
   position: absolute;
   display: flex;
@@ -233,7 +233,7 @@ body {
 
 .card-corner .rank {
   letter-spacing: -0.05em;
-  margin-bottom: 0.05em; /* Changed from -0.1em to provide slight breathing room */
+  margin-bottom: 0.05em;
 }
 
 .card-corner.top-left {
@@ -250,40 +250,71 @@ body {
 .card-content {
   width: 100%;
   height: 100%;
-  padding: 1.2em 2.2em; /* Adjusted padding to avoid corner indices */
+  padding: 1.2em 2.2em;
   position: relative;
   z-index: 5;
   display: flex;
   flex-direction: column;
 }
 
-.instruction-text {
+.deck-nav {
   margin-top: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.deck-nav-hint {
   color: rgba(255, 255, 255, 0.4);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
 }
 
+.deck-nav-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.5em 1.2em;
+  font-size: 0.8rem;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.05em;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.deck-nav-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.deck-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 /* ---------------- CARD INNER STYLES ---------------- */
 .card-section {
   width: 100%;
   margin: auto 0;
-  text-align: left; /* REVERTED TO LEFT */
+  text-align: left;
 }
 
 .deck-card h1, .deck-card h2, .deck-card h3, .deck-card h4, .deck-card p, .deck-card ul, .deck-card span {
-  color: #222222; /* Editorial print feel */
+  color: #222222;
 }
 
 .deck-card .tagline, .deck-card .tech-stack, .deck-card .exp-header span, .deck-card .skill-category p {
-  color: #666666; /* Softer secondary text */
+  color: #666666;
 }
 
 .deck-card h3 {
   position: relative;
   padding-bottom: 0.4em;
-  margin-bottom: 0.6em; /* Tightened from 0.8em to save space for larger text */
+  margin-bottom: 0.6em;
   color: #111;
 }
 
@@ -297,7 +328,7 @@ body {
   background-color: #b91c1c; 
 }
 
-/* ---------------- CARD INNER STYLES ---------------- */
+
 h1, h2, h3, h4 {
   font-family: 'Playfair Display', serif;
 }
@@ -306,9 +337,9 @@ h1 { font-size: 2.1em; line-height: 1.1; margin-bottom: 0.25em; letter-spacing: 
 h2 { font-size: 1.1em; color: var(--light-grey); margin-bottom: 0.5em; }
 h3 { font-size: 1.3em; text-transform: uppercase; letter-spacing: 0.1em; }
 h4 { font-size: 1.1em; margin-bottom: 0.15em; font-weight: 600; }
-p { font-size: 0.95em; margin-bottom: 0.25em; line-height: 1.5; } /* Increased from 0.85em, reduced margin */
+p { font-size: 0.95em; margin-bottom: 0.25em; line-height: 1.5; }
 
-ul { padding-left: 1.2em; color: var(--light-grey); font-size: 0.95em; margin-bottom: 0.3em; } /* Increased from 0.85em, reduced margin */
+ul { padding-left: 1.2em; color: var(--light-grey); font-size: 0.95em; margin-bottom: 0.3em; }
 li { margin-bottom: 0.15em; padding-left: 0.2em; }
 
 .hero-card { 
@@ -323,7 +354,7 @@ li { margin-bottom: 0.15em; padding-left: 0.2em; }
 }
 .hero-card .tagline { font-size: 1em; color: var(--light-grey); margin-bottom: 1em; text-align: center; width: 100%; }
 
-/* Buttons */
+
 .deck-card .btn {
   display: inline-block;
   padding: 0.6em 1.5em;
@@ -382,7 +413,7 @@ li { margin-bottom: 0.15em; padding-left: 0.2em; }
 .deck-card .btn-small.outline { background-color: transparent; color: #1a1a1a; border-color: #d1d5db; }
 .deck-card .btn-small.outline:hover { background-color: #f3f4f6; }
 
-/* Layouts */
+
 .skills-grid { display: flex; flex-direction: column; gap: 0.4em; align-items: flex-start; }
 .skill-category p { color: var(--light-grey); margin-bottom: 0; }
 
