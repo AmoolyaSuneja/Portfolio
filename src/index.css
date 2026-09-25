@@ -257,43 +257,12 @@ body {
   flex-direction: column;
 }
 
-.deck-nav {
+.instruction-text {
   margin-top: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-}
-
-.deck-nav-hint {
   color: rgba(255, 255, 255, 0.4);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-}
-
-.deck-nav-btn {
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 0.5em 1.2em;
-  font-size: 0.8rem;
-  font-family: 'Inter', sans-serif;
-  letter-spacing: 0.05em;
-  border-radius: 9999px;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
-.deck-nav-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.95);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.deck-nav-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
 }
 
 /* ---------------- CARD INNER STYLES ---------------- */

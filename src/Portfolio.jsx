@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useSprings, animated } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
@@ -15,7 +15,6 @@ const cardsData = [
 export default function Portfolio() {
   const order = useRef([0, 1, 2, 3, 4, 5]);
   const isAnimating = useRef(false);
-  const [animating, setAnimating] = useState(false);
   const lastCycleTime = useRef(0);
 
   const getSpringProps = (positionIndex) => ({
@@ -31,7 +30,6 @@ export default function Portfolio() {
   const cycleDeck = (dir = 1) => {
     if (isAnimating.current) return;
     isAnimating.current = true;
-    setAnimating(true);
 
 
     const now = Date.now();
@@ -100,7 +98,6 @@ export default function Portfolio() {
 
       setTimeout(() => {
         isAnimating.current = false;
-        setAnimating(false);
       }, unlockDelay);
     }, exitTimeout); 
   };
@@ -128,6 +125,15 @@ export default function Portfolio() {
       });
     }
   });
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') cycleDeck(1);
+      if (e.key === 'ArrowLeft') cycleDeck(-1);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <motion.div 
@@ -177,24 +183,8 @@ export default function Portfolio() {
           );
         })}
       </div>
-      <div className="deck-nav">
-        <button
-          className="deck-nav-btn"
-          onClick={() => cycleDeck(-1)}
-          disabled={animating}
-          aria-label="Previous card"
-        >
-          ← Prev
-        </button>
-        <span className="deck-nav-hint">Swipe or click to deal</span>
-        <button
-          className="deck-nav-btn"
-          onClick={() => cycleDeck(1)}
-          disabled={animating}
-          aria-label="Next card"
-        >
-          Next →
-        </button>
+      <div className="instruction-text">
+        <p>Swipe, click, or use arrow keys to deal</p>
       </div>
     </motion.div>
   );
