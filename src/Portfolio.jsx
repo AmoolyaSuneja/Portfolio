@@ -282,6 +282,11 @@ export default function Portfolio() {
           </button>
         ))}
       </div>
+      
+      <div className="instruction-text" style={{ marginTop: '2rem', opacity: 0.5, fontSize: '0.75rem', letterSpacing: '0.05em' }}>
+        <span className="desktop-text">Drag cards left/right or use the nav buttons</span>
+        <span className="mobile-text">Swipe cards left/right or tap the nav buttons</span>
+      </div>
     </motion.div>
   );
 }
