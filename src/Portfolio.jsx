@@ -114,12 +114,13 @@ export default function Portfolio() {
     const targetPos = order.current.indexOf(targetCardIndex);
 
     const totalCards = cardsData.length;
-    const fanSpread = 65;
+    const fanSpread = 45; // Tightened to show just the suits/digits
     const fanRotation = 6;
 
     api.start(i => {
       const pos = order.current.indexOf(i);
-      const centerOffset = pos - (totalCards - 1) / 2;
+      // Reversed offset: back cards (higher pos) go left (negative offset), exposing their top-left index
+      const centerOffset = ((totalCards - 1) / 2) - pos; 
       return {
         x: centerOffset * fanSpread,
         rot: centerOffset * fanRotation,
@@ -143,7 +144,7 @@ export default function Portfolio() {
           };
         }
       });
-    }, 150);
+    }, 450); // Increased from 150ms to 450ms so the fan stays open longer
 
     setTimeout(() => {
       order.current.splice(targetPos, 1);
@@ -178,7 +179,7 @@ export default function Portfolio() {
       setTimeout(() => {
         isAnimating.current = false;
       }, 400);
-    }, 420);
+    }, 600);
 
   }, [api]);
 
