@@ -124,7 +124,7 @@ export default function Portfolio() {
       return {
         x: isMobile ? 0 : centerOffset * fanSpread,
         rot: isMobile ? 0 : centerOffset * fanRotation,
-        y: isMobile ? centerOffset * 45 : Math.abs(centerOffset) * 12,
+        y: isMobile ? (centerOffset * 40) + 60 : Math.abs(centerOffset) * 12,
         scale: 1,
         zIndex: cardsData.length - pos,
         config: { mass: 1, tension: 320, friction: 32 },

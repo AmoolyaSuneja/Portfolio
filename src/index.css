@@ -378,6 +378,7 @@ body {
 
 @media (max-width: 600px) {
   .portfolio-deck-container {
+    padding-top: 3rem;
     padding-bottom: 1rem;
   }
 
