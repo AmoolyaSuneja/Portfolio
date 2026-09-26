@@ -122,9 +122,9 @@ export default function Portfolio() {
       // Reversed offset: back cards (higher pos) go left (negative offset), exposing their top-left index
       const centerOffset = ((totalCards - 1) / 2) - pos; 
       return {
-        x: centerOffset * fanSpread,
-        rot: centerOffset * fanRotation,
-        y: Math.abs(centerOffset) * 12,
+        x: isMobile ? 0 : centerOffset * fanSpread,
+        rot: isMobile ? 0 : centerOffset * fanRotation,
+        y: isMobile ? centerOffset * 45 : Math.abs(centerOffset) * 12,
         scale: 1,
         zIndex: cardsData.length - pos,
         config: { mass: 1, tension: 320, friction: 32 },
@@ -136,9 +136,9 @@ export default function Portfolio() {
       api.start(i => {
         if (i === targetCardIndex) {
           return {
-            x: 650,
-            y: -50,
-            rot: 25,
+            x: isMobile ? 0 : 650,
+            y: isMobile ? -window.innerHeight : -50,
+            rot: isMobile ? 0 : 25,
             scale: 1.05,
             config: { mass: 1, tension: 350, friction: 30 },
           };
