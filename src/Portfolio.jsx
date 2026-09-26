@@ -113,142 +113,73 @@ export default function Portfolio() {
     const isMobile = window.innerWidth < 600;
     const targetPos = order.current.indexOf(targetCardIndex);
 
-    if (isMobile) {
-      const totalCards = cardsData.length;
-      const fanSpread = 40;
-      const fanRotation = 8;
+    const totalCards = cardsData.length;
+    const fanSpread = 65;
+    const fanRotation = 6;
+
+    api.start(i => {
+      const pos = order.current.indexOf(i);
+      const centerOffset = pos - (totalCards - 1) / 2;
+      return {
+        x: centerOffset * fanSpread,
+        rot: centerOffset * fanRotation,
+        y: Math.abs(centerOffset) * 12,
+        scale: 1,
+        zIndex: cardsData.length - pos,
+        config: { mass: 1, tension: 320, friction: 32 },
+        immediate: key => key === 'zIndex'
+      };
+    });
+
+    setTimeout(() => {
+      api.start(i => {
+        if (i === targetCardIndex) {
+          return {
+            x: 650,
+            y: -50,
+            rot: 25,
+            scale: 1.05,
+            config: { mass: 1, tension: 350, friction: 30 },
+          };
+        }
+      });
+    }, 150);
+
+    setTimeout(() => {
+      order.current.splice(targetPos, 1);
+      order.current.unshift(targetCardIndex);
+      setActiveNav(targetCardIndex);
 
       api.start(i => {
-        const pos = order.current.indexOf(i);
-        const centerOffset = pos - (totalCards - 1) / 2;
-        return {
-          x: centerOffset * fanSpread,
-          rot: centerOffset * fanRotation,
-          y: Math.abs(centerOffset) * 12,
-          scale: 1,
-          zIndex: cardsData.length - pos,
-          config: { mass: 1, tension: 320, friction: 28 },
-          immediate: key => key === 'zIndex'
-        };
+        const newPos = order.current.indexOf(i);
+        if (i === targetCardIndex) {
+          return {
+            x: 0,
+            y: 0,
+            rot: 0,
+            scale: 1,
+            zIndex: cardsData.length + 1,
+            config: { mass: 1, tension: 320, friction: 36 },
+            immediate: key => key === 'zIndex'
+          };
+        } else {
+          return {
+            x: 0,
+            y: newPos * 15,
+            rot: 0,
+            scale: 1,
+            zIndex: cardsData.length - newPos,
+            config: { mass: 1, tension: 300, friction: 35 },
+            immediate: key => key === 'zIndex'
+          };
+        }
       });
 
       setTimeout(() => {
-        api.start(i => {
-          if (i === targetCardIndex) {
-            return {
-              x: window.innerWidth + 100,
-              y: -50,
-              rot: 25,
-              scale: 1.05,
-              config: { mass: 1, tension: 350, friction: 25 },
-            };
-          }
-        });
-      }, 150);
+        isAnimating.current = false;
+      }, 400);
+    }, 420);
 
-      setTimeout(() => {
-        order.current.splice(targetPos, 1);
-        order.current.unshift(targetCardIndex);
-        setActiveNav(targetCardIndex);
-
-        api.start(i => {
-          const newPos = order.current.indexOf(i);
-          if (i === targetCardIndex) {
-            return {
-              x: 0,
-              y: 0,
-              rot: 0,
-              scale: 1,
-              zIndex: cardsData.length + 1,
-              config: { mass: 1, tension: 320, friction: 36 },
-              immediate: key => key === 'zIndex'
-            };
-          } else {
-            return {
-              x: 0,
-              y: newPos * 15,
-              rot: 0,
-              scale: 1,
-              zIndex: cardsData.length - newPos,
-              config: { mass: 1, tension: 300, friction: 35 },
-              immediate: key => key === 'zIndex'
-            };
-          }
-        });
-
-        setTimeout(() => {
-          isAnimating.current = false;
-        }, 400);
-      }, 420);
-
-    } else {
-      const totalCards = cardsData.length;
-      const fanSpread = 65;
-      const fanRotation = 6;
-
-      api.start(i => {
-        const pos = order.current.indexOf(i);
-        const centerOffset = pos - (totalCards - 1) / 2;
-        return {
-          x: centerOffset * fanSpread,
-          rot: centerOffset * fanRotation,
-          y: Math.abs(centerOffset) * 12,
-          scale: 1,
-          zIndex: cardsData.length - pos,
-          config: { mass: 1, tension: 320, friction: 32 },
-          immediate: key => key === 'zIndex'
-        };
-      });
-
-      setTimeout(() => {
-        api.start(i => {
-          if (i === targetCardIndex) {
-            return {
-              x: 650,
-              y: -50,
-              rot: 25,
-              scale: 1.05,
-              config: { mass: 1, tension: 350, friction: 30 },
-            };
-          }
-        });
-      }, 150);
-
-      setTimeout(() => {
-        order.current.splice(targetPos, 1);
-        order.current.unshift(targetCardIndex);
-        setActiveNav(targetCardIndex);
-
-        api.start(i => {
-          const newPos = order.current.indexOf(i);
-          if (i === targetCardIndex) {
-            return {
-              x: 0,
-              y: 0,
-              rot: 0,
-              scale: 1,
-              zIndex: cardsData.length + 1,
-              config: { mass: 1, tension: 320, friction: 36 },
-              immediate: key => key === 'zIndex'
-            };
-          } else {
-            return {
-              x: 0,
-              y: newPos * 15,
-              rot: 0,
-              scale: 1,
-              zIndex: cardsData.length - newPos,
-              config: { mass: 1, tension: 300, friction: 35 },
-              immediate: key => key === 'zIndex'
-            };
-          }
-        });
-
-        setTimeout(() => {
-          isAnimating.current = false;
-        }, 400);
-      }, 420);
-    }
   }, [api]);
 
   const bind = useDrag(({ args: [index], down, movement: [mx], direction: [xDir], velocity: [vx], event }) => {
