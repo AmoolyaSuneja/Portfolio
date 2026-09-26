@@ -114,8 +114,8 @@ export default function Portfolio() {
     const targetPos = order.current.indexOf(targetCardIndex);
 
     const totalCards = cardsData.length;
-    const fanSpread = 65;
-    const fanRotation = 6;
+    const fanSpread = isMobile ? 50 : 65;
+    const fanRotation = isMobile ? 2 : 6; // Drastically reduced tilt for mobile
 
     api.start(i => {
       const pos = order.current.indexOf(i);
@@ -135,7 +135,7 @@ export default function Portfolio() {
       api.start(i => {
         if (i === targetCardIndex) {
           return {
-            x: 650,
+            x: isMobile ? window.innerWidth + 100 : 650,
             y: -50,
             rot: 25,
             scale: 1.05,
