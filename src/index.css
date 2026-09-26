@@ -681,3 +681,35 @@ li {
   gap: 0.75em;
   align-items: flex-start;
 }
+
+.portfolio-deck-container {
+  position: relative;
+}
+
+.instruction-text {
+  position: fixed;
+  right: 15vw;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.5;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  z-index: 100;
+  text-align: right;
+  width: 150px;
+  color: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .instruction-text {
+    position: absolute;
+    top: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
+    text-align: center;
+    width: 100%;
+    font-size: 0.65rem;
+  }
+}

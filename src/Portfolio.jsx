@@ -281,21 +281,7 @@ export default function Portfolio() {
           </button>
         ))}
       </div>
-      <div 
-        className="instruction-text" 
-        style={{ 
-          position: 'fixed', 
-          bottom: '2rem', 
-          left: '50%', 
-          transform: 'translateX(-50%)',
-          width: '100%',
-          opacity: 0.5, 
-          fontSize: '0.75rem', 
-          letterSpacing: '0.05em',
-          pointerEvents: 'none',
-          zIndex: 100
-        }}
-      >
+      <div className="instruction-text">
         <span className="desktop-text">Drag cards left/right or use the nav buttons</span>
         <span className="mobile-text">Swipe cards left/right or tap the nav buttons</span>
       </div>
