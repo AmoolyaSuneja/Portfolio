@@ -114,8 +114,8 @@ export default function Portfolio() {
     const targetPos = order.current.indexOf(targetCardIndex);
 
     const totalCards = cardsData.length;
-    const fanSpread = isMobile ? 50 : 65;
-    const fanRotation = isMobile ? 2 : 6; // Drastically reduced tilt for mobile
+    const fanSpread = 65;
+    const fanRotation = 6;
 
     api.start(i => {
       const pos = order.current.indexOf(i);
@@ -123,7 +123,7 @@ export default function Portfolio() {
       return {
         x: centerOffset * fanSpread,
         rot: centerOffset * fanRotation,
-        y: Math.abs(centerOffset) * (isMobile ? 25 : 12),
+        y: Math.abs(centerOffset) * 12,
         scale: 1,
         zIndex: cardsData.length - pos,
         config: { mass: 1, tension: 320, friction: 32 },
@@ -135,7 +135,7 @@ export default function Portfolio() {
       api.start(i => {
         if (i === targetCardIndex) {
           return {
-            x: isMobile ? window.innerWidth + 100 : 650,
+            x: 650,
             y: -50,
             rot: 25,
             scale: 1.05,
