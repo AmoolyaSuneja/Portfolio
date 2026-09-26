@@ -309,13 +309,12 @@ body {
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
   z-index: 50;
   width: max-content;
-  max-width: 450px;
 }
 
 .card-nav-key {
@@ -324,31 +323,26 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0;
-  width: 60px;
-  height: 84px;
-  background: rgba(20, 20, 22, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
+  width: 58px;
+  height: 80px;
+  background: #111111;
+  border: 1px solid #333333;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s ease-in-out;
   padding: 8px 4px;
-  position: relative;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
 }
 
 .card-nav-key:hover {
-  background: rgba(40, 40, 45, 0.8);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: #1a1a1a;
+  border-color: #555555;
+  transform: translateY(-2px);
 }
 
 .card-nav-key.active {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.05), inset 0 0 10px rgba(255, 255, 255, 0.02);
-  transform: scale(1.05);
+  background: #222222;
+  border-color: #ffffff;
+  transform: scale(1.03);
 }
 
 .card-nav-rank {
@@ -367,14 +361,18 @@ body {
 
 .card-nav-label {
   font-family: 'Inter', sans-serif;
-  font-size: 0.55rem;
+  font-size: 0.38rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #ffffff;
-  font-weight: 700;
+  color: #aaaaaa;
+  font-weight: 600;
   line-height: 1.2;
   text-align: center;
   width: 100%;
+}
+
+.card-nav-key.active .card-nav-label {
+  color: #ffffff;
 }
 
 @media (max-width: 600px) {
@@ -385,9 +383,9 @@ body {
   .deck {
     width: min(85vw, 42vh);
     margin: 0 auto;
-    margin-bottom: 80px; /* Reserve space for the absolute positioned cards */
+    margin-bottom: 60px;
     aspect-ratio: 2.5 / 3.5;
-    transform: translateY(-10px);
+    transform: translateY(10px);
   }
 
   .card-navigator {
@@ -395,7 +393,7 @@ body {
     left: auto;
     top: auto;
     transform: none;
-    margin-top: 2rem;
+    margin-top: 1rem;
     gap: 0.35rem;
     width: 100%;
     max-width: 100%;

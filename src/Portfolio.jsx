@@ -114,34 +114,31 @@ export default function Portfolio() {
     const targetPos = order.current.indexOf(targetCardIndex);
 
     if (isMobile) {
-      // MOBILE: Tight fan → toss up and right → drop on top
       const totalCards = cardsData.length;
-      const fanSpread = 22; // Tighter spread for small screens
-      const fanRotation = 10; // Steeper angle to show cards in less horizontal space
+      const fanSpread = 40;
+      const fanRotation = 8;
 
-      // Phase 1: Tight Fan out
       api.start(i => {
         const pos = order.current.indexOf(i);
         const centerOffset = pos - (totalCards - 1) / 2;
         return {
           x: centerOffset * fanSpread,
           rot: centerOffset * fanRotation,
-          y: Math.abs(centerOffset) * 10,
+          y: Math.abs(centerOffset) * 12,
           scale: 1,
           zIndex: cardsData.length - pos,
-          config: { mass: 1, tension: 350, friction: 28 },
+          config: { mass: 1, tension: 320, friction: 28 },
           immediate: key => key === 'zIndex'
         };
       });
 
-      // Phase 2: Toss target card out of the top-right corner
       setTimeout(() => {
         api.start(i => {
           if (i === targetCardIndex) {
             return {
-              x: 300, // Throw off the right edge
-              y: -400, // Throw off the top edge
-              rot: 45, // Spin it
+              x: window.innerWidth + 100,
+              y: -50,
+              rot: 25,
               scale: 1.05,
               config: { mass: 1, tension: 350, friction: 25 },
             };
@@ -149,7 +146,6 @@ export default function Portfolio() {
         });
       }, 150);
 
-      // Phase 3: Pop to front and drop back in
       setTimeout(() => {
         order.current.splice(targetPos, 1);
         order.current.unshift(targetCardIndex);
@@ -164,7 +160,7 @@ export default function Portfolio() {
               rot: 0,
               scale: 1,
               zIndex: cardsData.length + 1,
-              config: { mass: 1, tension: 320, friction: 36 }, // Dead stop landing
+              config: { mass: 1, tension: 320, friction: 36 },
               immediate: key => key === 'zIndex'
             };
           } else {
@@ -174,7 +170,7 @@ export default function Portfolio() {
               rot: 0,
               scale: 1,
               zIndex: cardsData.length - newPos,
-              config: { mass: 1, tension: 320, friction: 36 },
+              config: { mass: 1, tension: 300, friction: 35 },
               immediate: key => key === 'zIndex'
             };
           }
@@ -186,12 +182,10 @@ export default function Portfolio() {
       }, 420);
 
     } else {
-      // DESKTOP: Fan spread → slide out right → fly back to top (restack)
       const totalCards = cardsData.length;
       const fanSpread = 65;
       const fanRotation = 6;
 
-      // Phase 1: Fan out (Smoothly spread)
       api.start(i => {
         const pos = order.current.indexOf(i);
         const centerOffset = pos - (totalCards - 1) / 2;
@@ -206,12 +200,11 @@ export default function Portfolio() {
         };
       });
 
-      // Phase 2: Extract target card fully to the side so it clears the fan
       setTimeout(() => {
         api.start(i => {
           if (i === targetCardIndex) {
             return {
-              x: 650, // Far right, clears the deck completely
+              x: 650,
               y: -50,
               rot: 25,
               scale: 1.05,
@@ -221,7 +214,6 @@ export default function Portfolio() {
         });
       }, 150);
 
-      // Phase 3: Pop to front and fly back into restack
       setTimeout(() => {
         order.current.splice(targetPos, 1);
         order.current.unshift(targetCardIndex);
@@ -235,8 +227,8 @@ export default function Portfolio() {
               y: 0,
               rot: 0,
               scale: 1,
-              zIndex: cardsData.length + 1, // Ensure it sits firmly on top
-              config: { mass: 1, tension: 320, friction: 36 }, // Critically damped (no bounce)
+              zIndex: cardsData.length + 1,
+              config: { mass: 1, tension: 320, friction: 36 },
               immediate: key => key === 'zIndex'
             };
           } else {
@@ -246,7 +238,7 @@ export default function Portfolio() {
               rot: 0,
               scale: 1,
               zIndex: cardsData.length - newPos,
-              config: { mass: 1, tension: 300, friction: 35 }, // Critically damped
+              config: { mass: 1, tension: 300, friction: 35 },
               immediate: key => key === 'zIndex'
             };
           }
