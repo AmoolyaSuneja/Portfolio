@@ -114,12 +114,11 @@ export default function Portfolio() {
     const targetPos = order.current.indexOf(targetCardIndex);
 
     const totalCards = cardsData.length;
-    const fanSpread = 45; // Tightened to show just the suits/digits
+    const fanSpread = 45;
     const fanRotation = 6;
 
     api.start(i => {
       const pos = order.current.indexOf(i);
-      // Reversed offset: back cards (higher pos) go left (negative offset), exposing their top-left index
       const centerOffset = ((totalCards - 1) / 2) - pos; 
       return {
         x: isMobile ? 0 : centerOffset * fanSpread,
@@ -144,7 +143,7 @@ export default function Portfolio() {
           };
         }
       });
-    }, 450); // Increased from 150ms to 450ms so the fan stays open longer
+    }, 450);
 
     setTimeout(() => {
       order.current.splice(targetPos, 1);
@@ -282,8 +281,21 @@ export default function Portfolio() {
           </button>
         ))}
       </div>
-      
-      <div className="instruction-text" style={{ marginTop: '2rem', opacity: 0.5, fontSize: '0.75rem', letterSpacing: '0.05em' }}>
+      <div 
+        className="instruction-text" 
+        style={{ 
+          position: 'fixed', 
+          bottom: '2rem', 
+          left: '50%', 
+          transform: 'translateX(-50%)',
+          width: '100%',
+          opacity: 0.5, 
+          fontSize: '0.75rem', 
+          letterSpacing: '0.05em',
+          pointerEvents: 'none',
+          zIndex: 100
+        }}
+      >
         <span className="desktop-text">Drag cards left/right or use the nav buttons</span>
         <span className="mobile-text">Swipe cards left/right or tap the nav buttons</span>
       </div>
