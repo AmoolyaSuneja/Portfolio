@@ -123,7 +123,7 @@ export default function Portfolio() {
       return {
         x: centerOffset * fanSpread,
         rot: centerOffset * fanRotation,
-        y: Math.abs(centerOffset) * 12,
+        y: Math.abs(centerOffset) * (isMobile ? 25 : 12),
         scale: 1,
         zIndex: cardsData.length - pos,
         config: { mass: 1, tension: 320, friction: 32 },
