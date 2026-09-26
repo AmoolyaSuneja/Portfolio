@@ -383,9 +383,9 @@ body {
   .deck {
     width: min(85vw, 42vh);
     margin: 0 auto;
-    margin-bottom: 60px;
+    margin-bottom: 90px; /* Safe clearance for the 75px card stack */
     aspect-ratio: 2.5 / 3.5;
-    transform: translateY(10px);
+    transform: none;
   }
 
   .card-navigator {
@@ -393,27 +393,33 @@ body {
     left: auto;
     top: auto;
     transform: none;
-    margin-top: 1rem;
-    gap: 0.35rem;
+    margin-top: 0;
+    gap: 0.5rem;
     width: 100%;
     max-width: 100%;
     justify-content: center;
-    padding: 0;
+    padding: 0 10px;
+    flex-wrap: wrap; /* Let pill buttons wrap gracefully on very narrow screens */
   }
 
   .card-nav-key {
-    width: 48px;
-    height: 66px;
-    padding: 4px;
+    width: auto;
+    min-width: 40px;
+    height: 32px;
+    padding: 0 8px;
+    border-radius: 4px;
+    flex-direction: row;
   }
   
-  .card-nav-rank {
-    font-size: 0.9rem;
+  .card-nav-rank, 
+  .card-nav-suit {
+    display: none; /* Hide card symbols on mobile */
   }
   
   .card-nav-label {
-    font-size: 0.4rem;
-    letter-spacing: 0.02em;
+    font-size: 0.5rem;
+    letter-spacing: 0.05em;
+    margin: 0;
   }
 }
 
