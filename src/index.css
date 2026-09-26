@@ -385,6 +385,7 @@ body {
   .deck {
     width: min(85vw, 42vh);
     margin: 0 auto;
+    margin-bottom: 80px; /* Reserve space for the absolute positioned cards */
     aspect-ratio: 2.5 / 3.5;
     transform: translateY(-10px);
   }

@@ -114,26 +114,47 @@ export default function Portfolio() {
     const targetPos = order.current.indexOf(targetCardIndex);
 
     if (isMobile) {
-      // MOBILE: Slide completely out to the right, then fly in on top
+      // MOBILE: Tight fan → toss up and right → drop on top
+      const totalCards = cardsData.length;
+      const fanSpread = 22; // Tighter spread for small screens
+      const fanRotation = 10; // Steeper angle to show cards in less horizontal space
+
+      // Phase 1: Tight Fan out
       api.start(i => {
-        if (i === targetCardIndex) {
-          return {
-            x: window.innerWidth + 100, // Slide off-screen to clear deck
-            y: -50,
-            rot: 25,
-            scale: 1,
-            config: { mass: 1, tension: 350, friction: 25 },
-          };
-        }
+        const pos = order.current.indexOf(i);
+        const centerOffset = pos - (totalCards - 1) / 2;
+        return {
+          x: centerOffset * fanSpread,
+          rot: centerOffset * fanRotation,
+          y: Math.abs(centerOffset) * 10,
+          scale: 1,
+          zIndex: cardsData.length - pos,
+          config: { mass: 1, tension: 350, friction: 28 },
+          immediate: key => key === 'zIndex'
+        };
       });
 
+      // Phase 2: Toss target card out of the top-right corner
       setTimeout(() => {
-        // Reorder
+        api.start(i => {
+          if (i === targetCardIndex) {
+            return {
+              x: 300, // Throw off the right edge
+              y: -400, // Throw off the top edge
+              rot: 45, // Spin it
+              scale: 1.05,
+              config: { mass: 1, tension: 350, friction: 25 },
+            };
+          }
+        });
+      }, 150);
+
+      // Phase 3: Pop to front and drop back in
+      setTimeout(() => {
         order.current.splice(targetPos, 1);
         order.current.unshift(targetCardIndex);
         setActiveNav(targetCardIndex);
 
-        // Restack
         api.start(i => {
           const newPos = order.current.indexOf(i);
           if (i === targetCardIndex) {
@@ -142,8 +163,8 @@ export default function Portfolio() {
               y: 0,
               rot: 0,
               scale: 1,
-              zIndex: cardsData.length,
-              config: { mass: 1, tension: 320, friction: 36 }, // Critically damped (no bounce)
+              zIndex: cardsData.length + 1,
+              config: { mass: 1, tension: 320, friction: 36 }, // Dead stop landing
               immediate: key => key === 'zIndex'
             };
           } else {
@@ -161,8 +182,8 @@ export default function Portfolio() {
 
         setTimeout(() => {
           isAnimating.current = false;
-        }, 350);
-      }, 200);
+        }, 400);
+      }, 420);
 
     } else {
       // DESKTOP: Fan spread → slide out right → fly back to top (restack)
