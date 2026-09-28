@@ -111,6 +111,7 @@ export default function Portfolio() {
     isAnimating.current = true;
 
     const isMobile = window.innerWidth < 600;
+    const isTablet = window.innerWidth >= 600 && window.innerWidth <= 1024;
     const targetPos = order.current.indexOf(targetCardIndex);
 
     const totalCards = cardsData.length;
@@ -121,7 +122,7 @@ export default function Portfolio() {
       const pos = order.current.indexOf(i);
       const centerOffset = ((totalCards - 1) / 2) - pos; 
       return {
-        x: isMobile ? 0 : centerOffset * fanSpread,
+        x: isMobile ? 0 : (isTablet ? centerOffset * 35 : centerOffset * 45),
         rot: isMobile ? 0 : centerOffset * fanRotation,
         y: isMobile ? (centerOffset * 40) + 60 : Math.abs(centerOffset) * 12,
         scale: 1,
@@ -135,7 +136,7 @@ export default function Portfolio() {
       api.start(i => {
         if (i === targetCardIndex) {
           return {
-            x: isMobile ? 0 : 650,
+            x: isMobile ? 0 : (isTablet ? 320 : 650),
             y: isMobile ? -window.innerHeight : -50,
             rot: isMobile ? 0 : 25,
             scale: 1.05,
