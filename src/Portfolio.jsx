@@ -111,7 +111,7 @@ export default function Portfolio() {
     isAnimating.current = true;
 
     const isMobile = window.innerWidth < 600;
-    const isTablet = window.innerWidth >= 600 && window.innerWidth <= 1024;
+    const isTablet = window.innerWidth >= 600 && window.innerWidth <= 1300;
     const targetPos = order.current.indexOf(targetCardIndex);
 
     const totalCards = cardsData.length;

@@ -715,7 +715,7 @@ li {
 }
 
 /* Tablets and other big screens */
-@media (min-width: 601px) and (max-width: 1024px) {
+@media (min-width: 601px) and (max-width: 1300px) {
   .card-navigator {
     position: fixed;
     top: auto;
