@@ -136,7 +136,7 @@ export default function Portfolio() {
       api.start(i => {
         if (i === targetCardIndex) {
           return {
-            x: isMobile ? 0 : (isTablet ? 320 : 650),
+            x: isMobile ? 0 : (isTablet ? 500 : 650),
             y: isMobile ? -window.innerHeight : -50,
             rot: isMobile ? 0 : 25,
             scale: 1.05,
